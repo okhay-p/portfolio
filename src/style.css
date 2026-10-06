@@ -10,3 +10,26 @@ body[data-variant=C]{background:#f7f7f2;color:#27312f;--muted:#7c8682;--line:#df
 /* User-supplied character; blend its white backdrop into the light layouts. */
 .portrait{display:flex;align-items:center;justify-content:center}
 .portrait img{display:block;width:100%;height:100%;object-fit:contain;object-position:center bottom;mix-blend-mode:multiply}
+/* Real projects and the AI-assisted development toolkit, shared by all directions. */
+.github-profile{font-size:11px;border-bottom:1px solid currentColor;padding-bottom:4px;white-space:nowrap}
+.project-description{font-size:11px;line-height:1.8;color:var(--muted);margin-top:11px;max-width:380px}
+.skills-section,.repository-section{padding:40px 6% 65px;max-width:1600px;margin:auto}
+.skills-section{border-top:1px solid var(--line)}
+.skills-intro{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin:20px 0 30px}
+.skills-intro h2{font-family:'Manrope',sans-serif;font-size:35px;line-height:1.2;font-weight:500;letter-spacing:-1px}
+.skills-intro p{font-size:12px;color:var(--muted)}
+.skills-groups{display:grid;grid-template-columns:1fr 1fr;gap:35px}
+.skills-groups h3{font-size:10px;letter-spacing:.5px;font-weight:500;color:var(--muted);margin-bottom:14px}
+.skill-tags{display:flex;flex-wrap:wrap;gap:8px}
+.skill-tags>span{padding:10px 14px;border:1px solid var(--line);border-radius:7px;font-size:12px;display:flex;align-items:center;gap:10px}
+.agent-tags>span{background:#e8e9df;border-color:transparent}.agent-tags i{font-style:normal;font-size:17px}
+body[data-variant=B] .agent-tags>span{background:#252b23;color:#c5f98b}
+.repo-list{display:grid;grid-template-columns:1fr 1fr;gap:0 35px}
+.repo-list>a{display:flex;gap:18px;align-items:center;padding:17px 0;border-bottom:1px solid var(--line);font-size:12px}
+.repo-name{flex:1;overflow-wrap:anywhere}.repo-name small{font-size:7px;margin-left:9px;letter-spacing:1px;color:var(--muted)}
+.repo-language{color:var(--muted);font-size:9px}
+.c-content .skills-section,.c-content .repository-section{padding-left:0;padding-right:0;margin-top:50px}
+.b-work .work-row h3{font-size:clamp(23px,2.7vw,36px)}
+.project-meta{align-items:flex-start;flex-direction:column;gap:7px}.project-meta>span{font-size:8px}
+@media(min-width:1100px){.a-projects{grid-template-columns:repeat(3,1fr)}.a-projects .project-art{height:270px}.a-projects .art-label{font-size:32px;left:25px;top:28px}}
+@media(max-width:700px){.nav nav{gap:13px}.nav nav a:last-child{display:none}.skills-groups,.repo-list{grid-template-columns:1fr}.skills-intro{display:block}.skills-intro h2{font-size:29px}.skills-intro p{margin-top:18px}.skills-section,.repository-section{padding-top:30px;padding-bottom:40px}.repository-section .section-heading h2{font-size:14px}.github-profile{font-size:9px}.project-meta{display:flex}.project-meta>span{font-size:8px}.project-description{font-size:10px}.c-content .repo-list>a{font-size:11px}.work-row h3{overflow-wrap:anywhere}}
