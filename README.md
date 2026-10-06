@@ -4,7 +4,7 @@ Question: which minimal portfolio layout best complements stylized 3D objects an
 
 Run `npm install`, then `npm run prototype`. Open http://localhost:5173.
 
-- `/?variant=A` — **Soft & human**: warm editorial typography, a generated character portrait, two featured projects.
+- `/?variant=A` — **Soft & human**: warm editorial typography, a supplied full-length character image, two featured projects.
 - `/?variant=B` — **After hours**: dark studio, oversized typography, abstract sculpture, a typographic project index.
 - `/?variant=C` — **Objects of curiosity**: persistent introduction sidebar and an asymmetric object collection.
 
@@ -14,4 +14,4 @@ Everything is illustrative: projects, biography, and contact email are sample co
 
 Captured on `prototype/portfolio-variants`. No direction has been selected yet. Once selected, record the verdict and implement the chosen direction in production code; preserve this branch as the visual reference.
 
-The character in A and C is now a transparent AI-generated PNG, replacing the procedural Three.js character. Abstract project objects remain interactive Three.js scenes. Asset: `public/images/oakkar-portrait-v1.png`; full generation prompt: `public/images/oakkar-portrait-v1.prompt.md`.
+The character in A and C uses the user-supplied `public/images/oakkar-character-v2.png`. Its white background blends into the light layouts with CSS; the source image is unchanged. Abstract project objects remain interactive Three.js scenes. The earlier generated portrait and its prompt remain available as an unused design reference.
