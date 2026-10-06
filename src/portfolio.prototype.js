@@ -55,8 +55,8 @@ function buildScene(el) {
     for(let i=0;i<6;i++){const a=i/6*Math.PI*2;const m=mesh(new THREE.CapsuleGeometry(.22,.72,8,24),mat,[Math.sin(a)*.7,Math.cos(a)*.7,0]);m.rotation.z=-a;}
     group.rotation.set(.3,-.35,.18);
   }
-  const floor=new THREE.Mesh(new THREE.PlaneGeometry(20,20),new THREE.ShadowMaterial({opacity:.13}));floor.rotation.x=-Math.PI/2;floor.position.y=type==='character'?-1.7:-1.6;floor.receiveShadow=true;world.add(floor);
-  let width=0,height=0;const resize=()=>{width=el.clientWidth;height=el.clientHeight;renderer.setSize(width,height);camera.aspect=width/height;camera.position.z=type==='character'?(width/height<.85?10:8.5):8;camera.updateProjectionMatrix();}; const observer=new ResizeObserver(resize);observer.observe(el);resize();
+  const floor=new THREE.Mesh(new THREE.PlaneGeometry(20,20),new THREE.ShadowMaterial({opacity:type==='character'?0:.13}));floor.rotation.x=-Math.PI/2;floor.position.y=type==='character'?-1.7:-1.6;floor.receiveShadow=true;world.add(floor);
+  let width=0,height=0;const resize=()=>{width=el.clientWidth;height=el.clientHeight;renderer.setSize(width,height);camera.aspect=width/height;camera.position.z=type==='character'?5.6:8;if(type==='character')camera.lookAt(0,.45,0);camera.updateProjectionMatrix();}; const observer=new ResizeObserver(resize);observer.observe(el);resize();
   let px=0,py=0;const pointer=e=>{const r=el.getBoundingClientRect();px=(e.clientX-r.left)/r.width-.5;py=(e.clientY-r.top)/r.height-.5;};const reset=()=>{px=0;py=0;};el.addEventListener('pointermove',pointer);el.addEventListener('pointerleave',reset);
   const baseY=group.rotation.y,baseX=group.rotation.x; const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;let frame;const start=performance.now();
   function animate(now){frame=requestAnimationFrame(animate);const t=(now-start)/1000;group.rotation.y+=(baseY+px*.35+(reduced?0:Math.sin(t*.45)*.07)-group.rotation.y)*.06;group.rotation.x+=(baseX+py*.18-group.rotation.x)*.06;group.position.y=reduced?0:Math.sin(t*1.1)*.065;renderer.render(world,camera);}frame=requestAnimationFrame(animate);
