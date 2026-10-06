@@ -1,0 +1,9 @@
+# Generated portfolio portrait
+
+Tool: built-in image_gen. Transparent PNG, 1024 × 1536.
+
+References: user's photo (likeness) and animated character image (style). No reference photos are bundled with the website.
+
+Final prompt:
+
+Use case: stylized-concept. Asset type: transparent character portrait for a minimalist personal portfolio website. Generate a premium, beautifully art-directed animated feature-film style portrait. Reference image 1 is the person's likeness: preserve his recognizable warm medium tan complexion, slim elongated face, wavy black hair, round thin silver metal glasses, and subtle warm smile. Reference image 2 is ONLY the rendering and stylization reference: expressive appealing eyes, elegant elongated face and neck, sculpted features, meticulously groomed tousled hair with individual strands, soft skin shading, exceptionally polished cinematic character art. Translate the man from image 1 into the visual language of image 2, keeping an attractive friendly confident expression rather than a worried expression. Clothing: matte black oversized hoodie, natural woven fabric detail, hood down, understated drawstrings, slightly narrower shoulders and slender build. Composition: a single character, front facing with a very subtle three-quarter angle, waist-up portrait, complete hair silhouette and both shoulders inside the frame, comfortable margin above hair and at sides. Soft warm studio key light and gentle cool fill, beautifully balanced shadows, realistic material nuance within stylized animation aesthetics. Actual transparent background with clean fine hair alpha edges, no environment, no rectangle backdrop, no text, no watermark, no props. Avoid crude primitive shapes, toy-like body, plastic skin, bug-eyed stare, extreme caricature, plaid shirt. The result should feel like a carefully sculpted hero character from a high-budget animated film.
