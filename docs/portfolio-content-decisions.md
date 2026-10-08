@@ -16,3 +16,8 @@ Alice's portfolio belongs to a friend and is excluded from featured work and rep
 Social destinations: LinkedIn https://www.linkedin.com/in/oakkarphyo/ and GitHub https://github.com/okhay-p.
 
 Outside technology: football, past 3D modeling and animation. Keep this to a short About mention and one visual card linking to https://www.instagram.com/noooidea.creative/. The card image is generated from the user's render references, documented separately.
+
+
+## PlayKit launch update — 9 October 2026
+
+The former Poker helper project is now PlayKit, a live party-game helper at https://playkit.oakkarphyo.com, with public code at https://github.com/okhay-p/playkit. Keep it first in the collection and replace the early-design/no-demo status with Live. The repository README confirms poker tracking, a chess clock, and optional phone joining for poker. More games are planned. Keep the existing poker illustration, link the card to the live app, provide a separate source-code link, and include PlayKit in the public repository list.

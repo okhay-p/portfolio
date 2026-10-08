@@ -31,3 +31,6 @@
 @media(max-width:600px){.collection{grid-template-columns:1fr;gap:36px}.collection-sticker{left:16px;top:auto;bottom:16px;max-width:calc(100% - 32px)}.project-status{top:14px;left:14px}.skills-section,.repository-section{padding-top:30px;padding-bottom:25px}.c-about{padding-top:40px}.instagram-card-caption{padding:16px}.instagram-card-caption h3{font-size:var(--text-xl)}.section-heading{align-items:flex-start}.repo-list>a{gap:12px}footer{flex-wrap:wrap}}
 @media(max-height:740px) and (min-width:801px){.c-sidebar{position:static;height:auto;min-height:0;justify-content:flex-start;gap:40px}.c-sidebar-bottom{margin-top:auto}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+
+.project-primary{display:block}.project-links{margin-top:14px;font-size:var(--text-sm)}.project-links a{border-bottom:1px solid currentColor;padding-bottom:3px}.project-links a:hover{color:#955038}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){.project-primary:hover .project-image{transform:scale(1.025)}.project-primary:hover .collection-meta>span{transform:translate(3px,-3px)}}
