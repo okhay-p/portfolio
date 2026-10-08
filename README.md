@@ -8,8 +8,10 @@ Typography: [Fraunces](https://fonts.google.com/specimen/Fraunces), a soft expre
 
 The character artwork was supplied by the user: `public/images/oakkar-character-v2.png`. Its white backdrop blends into the page through CSS. Project illustrations are decorative Three.js scenes, not project screenshots. The earlier generated portrait and its prompt are preserved in the prototype branch.
 
-Projects and public repository metadata were retrieved with GitHub CLI on 2026-10-06. `src/github-repositories.js` contains only the four public original repositories, excluding private repos and forks. Featured project descriptions were checked against source files and repository metadata. The full inventory of 24 repositories is outside the site repository at `/home/oakkar/.codex/portfolio-repositories.md`.
+Projects and public repository metadata were retrieved with GitHub CLI on 2026-10-06. `src/github-repositories.js` contains only the three included public original repositories, excluding private repos, forks, and the friend’s portfolio. Featured project descriptions were checked against source files and repository metadata. The full inventory of 24 repositories is outside the site repository at `/home/oakkar/.codex/portfolio-repositories.md`.
 
 Skills include Hermes, OpenCode, and Codex under AI-assisted development.
 
 Use `npm run build` for a production build, and `npm run preview` to inspect it.
+
+The completed content interview and project status decisions are captured in `docs/portfolio-content-decisions.md`. The four featured stories are Poker helper, SSH manager, Home server, and archived AkashaLearn.

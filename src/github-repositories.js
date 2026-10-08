@@ -1,17 +1,5 @@
-// Public original repositories retrieved with GitHub CLI on 2026-10-06.
+// Public original repositories; friend’s portfolio excluded at the user’s request.
 export const repositories = [
-  {
-    "description": "Portfolio for Alice made with Astro",
-    "homepageUrl": "https://alice-portfolio-ten.vercel.app",
-    "isFork": false,
-    "isPrivate": false,
-    "name": "alice-portfolio",
-    "primaryLanguage": {
-      "name": "Astro"
-    },
-    "updatedAt": "2026-05-25T14:48:01Z",
-    "url": "https://github.com/okhay-p/alice-portfolio"
-  },
   {
     "description": "",
     "homepageUrl": "",

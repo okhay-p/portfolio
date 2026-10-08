@@ -23,3 +23,6 @@ h1,h2,.wordmark,.wide-art-copy{font-family:Fraunces,Georgia,serif;font-optical-s
 .instagram-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px #27312f12}.about-socials{display:flex;gap:24px;align-items:center}
 @media(max-width:700px){.instagram-card-caption{padding:15px}.instagram-card-caption h3{font-size:21px}}
 @media(prefers-reduced-motion:reduce){.instagram-card{transition:none!important}.instagram-card:hover{transform:none}}
+.project-status{position:absolute;top:18px;left:18px;padding:7px 10px;border-radius:20px;background:#f7f7f2e6;color:#414a45;font-size:9px;letter-spacing:.3px}
+.project-description{max-width:none}.collection-meta p{line-height:1.7}
+@media(max-width:700px){.c-sidebar-bottom{flex-wrap:wrap;gap:18px 24px}.project-status{top:12px;left:12px;font-size:8px}.collection-meta h2{font-size:18px}}
