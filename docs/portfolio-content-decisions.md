@@ -21,3 +21,8 @@ Outside technology: football, past 3D modeling and animation. Keep this to a sho
 ## PlayKit launch update — 9 October 2026
 
 The former Poker helper project is now PlayKit, a live party-game helper at https://playkit.oakkarphyo.com, with public code at https://github.com/okhay-p/playkit. Keep it first in the collection and replace the early-design/no-demo status with Live. The repository README confirms poker tracking, a chess clock, and optional phone joining for poker. More games are planned. Keep the existing poker illustration, link the card to the live app, provide a separate source-code link, and include PlayKit in the public repository list.
+
+
+## PlayKit toolkit update — 9 October 2026
+
+Checked the main-branch README and recent merged game-tools changes. PlayKit now includes six tools: poker, chess clock, scorekeeper, tournament manager, Undercover, and Imposter. Phone joining extends beyond poker to scorekeeping, tournaments, and word games; chess remains a shared-device clock. Updated the featured description and metadata to reflect the available toolkit instead of describing the other games as merely planned.

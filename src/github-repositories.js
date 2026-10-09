@@ -1,7 +1,7 @@
 // Public original repositories; friend’s portfolio excluded at the user’s request.
 export const repositories = [
   {
-    "description": "A shared-device helper for physical poker and chess, with optional peer-to-peer poker sessions.",
+    "description": "A game-night toolkit with poker, a chess clock, scorekeeping, tournaments, Undercover, and Imposter, plus phone sessions for supported games.",
     "homepageUrl": "https://playkit.oakkarphyo.com",
     "isFork": false,
     "isPrivate": false,
