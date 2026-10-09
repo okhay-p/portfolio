@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://oakkarphyo.com/sitemap.xml

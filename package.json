@@ -5,11 +5,14 @@
   "type": "module",
   "scripts": {
     "prototype": "vite --host 0.0.0.0",
-    "build": "vite build",
+    "build": "vite build && node scripts/generate-sitemap.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "dev": "vite --host 0.0.0.0"
   },
   "dependencies": {
     "vite": "^7.1.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.149.0"
   }
 }
