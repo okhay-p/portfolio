@@ -10,14 +10,6 @@ Final prompt:
 
 Use case: stylized-concept. Asset type: landscape 3:2 illustration for a minimalist personal portfolio project card. A premium playful stylized 3D still life, soft rounded geometry, matte ceramic and tactile clay materials, restrained pastel palette, warm softbox light from upper left, subtle contact shadows, slightly elevated three-quarter camera, clean seamless studio backdrop and floor of one pastel color. One cohesive central cluster, comfortably framed with generous negative space around all sides and especially upper left for a small status badge added in HTML. Readable at thumbnail size. No screenshot, no actual software interface, no text, no letters, no logos, no watermark, no people, no currency banknotes, no busy scenery. Subject: poker chips and playing cards representing a companion for poker played with real cards. Three neat little stacks of thick poker chips in terracotta, cream, and dusty sage, soft edge notches, one loose chip leaning on a stack. Two white cards angled behind the stacks bearing only a simple dark spade and terracotta heart suit symbol, no numbers or lettering. A subtle round cream play mat beneath. Background is very light dusty lilac #e7e1f4. Charming physical tabletop objects, beautifully lit, naturally balanced arrangement.
 
-## SSH manager
-
-Saved asset: `public/images/ssh-manager-v1.webp`
-
-Final prompt:
-
-Use case: stylized-concept. Asset type: landscape 3:2 illustration for a minimalist personal portfolio project card. A premium playful stylized 3D still life, soft rounded geometry, matte ceramic and tactile clay materials, restrained pastel palette, warm softbox light from upper left, subtle contact shadows, slightly elevated three-quarter camera, clean seamless studio backdrop and floor of one pastel color. One cohesive central cluster, comfortably framed with generous negative space around all sides and especially upper left for a small status badge added in HTML. Readable at thumbnail size. No screenshot, no actual software interface, no text, no letters, no logos, no watermark, no people, no currency banknotes, no busy scenery. Subject: SSH connection manager represented by a small chunky rounded cream terminal block, a freestanding clay key in muted terracotta, and two tiny lavender remote server cubes connected by one neatly curved dark cord. The terminal block has a charcoal inset front panel bearing ONLY a simple embossed terminal chevron and underscore symbol, no other writing and no real UI. Key has a large rounded bow and two clearly defined teeth. Arrange in a clean sculptural still life, terminal at back left, key standing at front center, little server cubes at right. Background is pale peach #f3e0cd. Charming tactile objects representing a simple key that unlocks remote connections.
-
 ## Home server
 
 Saved asset: `public/images/home-server-v1.webp`

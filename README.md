@@ -16,4 +16,4 @@ Use `npm run build` for a production build, and `npm run preview` to inspect it.
 
 Every production build regenerates `dist/sitemap.xml` from the built HTML pages using canonical URLs on `https://oakkarphyo.com`. Adding or removing a published HTML page updates the sitemap on the next build and deployment. `404.html` is excluded; page sections and external project links are not separate pages. `public/robots.txt` points crawlers to the sitemap.
 
-The completed content interview and project status decisions are captured in `docs/portfolio-content-decisions.md`. The four featured stories are Poker helper, SSH manager, Home server, and archived AkashaLearn.
+The completed content interview and project status decisions are captured in `docs/portfolio-content-decisions.md`. The three featured stories are PlayKit, Home server, and archived AkashaLearn.
