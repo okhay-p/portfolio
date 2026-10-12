@@ -29,3 +29,9 @@ Checked the main-branch README and recent merged game-tools changes. PlayKit now
 ## Featured collection update — 9 October 2026
 
 Removed the SSH manager from the portfolio because built-in SSH configuration already supports connecting with `ssh server_alias`. The collection now features PlayKit, Home server, and AkashaLearn.
+
+## Technical writeups — 13 October 2026
+
+The user selected the case-study prototype and requested migration to Astro SSG. This supersedes the original decision to omit separate project pages. Preserve the selected homepage layout, link PlayKit to a dedicated writeup, and add a learning-notes index for future projects.
+
+PlayKit’s article explains the learning goal, host-authoritative WebRTC data channels, signaling flow, ICE/STUN/TURN, current network limits, and proposed experiments. Its current deployment uses STUN without TURN; the diagram must identify the relay as an optional extension. New articles live in the validated Markdown/MDX collection and use the shared case-study layout.

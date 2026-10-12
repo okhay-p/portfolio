@@ -1,0 +1,17 @@
+---
+interface Props {
+  project: {
+    name: string; color: string; image: string; alt: string; status: string;
+    detail: string; url?: string;
+  };
+}
+const { project } = Astro.props;
+---
+<div class:list={['collection-art', project.color]}>
+  <img class="project-image" src={`/images/${project.image}`} alt={project.alt} width="1200" height="800" loading="lazy" decoding="async" />
+  <span class="project-status">{project.status}</span>
+</div>
+<div class="collection-meta">
+  <div><h2>{project.name}</h2><p>{project.detail}</p></div>
+  {project.url && <span aria-hidden="true">↗</span>}
+</div>
