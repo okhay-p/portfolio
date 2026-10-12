@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WritingHeader from '../../components/WritingHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import '../../writing.css';
+const entries = (await getCollection('writing')).sort((a, b) => a.data.title.localeCompare(b.data.title));
+---
+<BaseLayout title="Learning notes — Oakkar Phyo" description="Technical writeups from building small projects to learn new technology. Architecture, decisions, and what I want to explore next.">
+  <div class="writing-shell">
+    <WritingHeader />
+    <main id="main-content">
+      <header class="case-intro notes-intro"><h1>Built it.<br />Learned something.</h1><p>Projects give me a reason to try new technology. These are the notes I keep along the way: how things work, the choices I made, and what I want to explore next.</p></header>
+      <div class="writing-list">
+        {entries.map(entry => (
+          <article class="writing-preview">
+            <a class="writing-preview-image" href={`/writing/${entry.id}`} tabindex="-1" aria-hidden="true"><img src={entry.data.image} alt="" width="1200" height="800" loading="lazy" /></a>
+            <div>
+              <p class="writing-project">{entry.data.project}</p>
+              <h2><a href={`/writing/${entry.id}`}>{entry.data.title}</a></h2>
+              <p>{entry.data.description}</p>
+              <ul class="writing-tags" aria-label="Topics">{entry.data.tags.map(tag => <li>{tag}</li>)}</ul>
+              <a class="read-writeup" href={`/writing/${entry.id}`}>Read the writeup</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </main>
+    <SiteFooter />
+  </div>
+</BaseLayout>

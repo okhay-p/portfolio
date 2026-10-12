@@ -32,5 +32,6 @@
 @media(max-height:740px) and (min-width:801px){.c-sidebar{position:static;height:auto;min-height:0;justify-content:flex-start;gap:40px}.c-sidebar-bottom{margin-top:auto}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
 
-.project-primary{display:block}.project-links{margin-top:14px;font-size:var(--text-sm)}.project-links a{border-bottom:1px solid currentColor;padding-bottom:3px}.project-links a:hover{color:#955038}
+.project-primary{display:block}.project-links{display:flex;flex-wrap:wrap;gap:12px 20px;margin-top:14px;font-size:var(--text-sm)}.project-links a{border-bottom:1px solid currentColor;padding-bottom:3px}.project-links a:hover{color:#955038}
+.skip-link{position:absolute;left:16px;top:16px;z-index:10;padding:10px 16px;background:#27312f;color:#f7f7f2;border-radius:5px;transform:translateY(-150%)}.skip-link:focus{transform:translateY(0)}
 @media(hover:hover) and (prefers-reduced-motion:no-preference){.project-primary:hover .project-image{transform:scale(1.025)}.project-primary:hover .collection-meta>span{transform:translate(3px,-3px)}}

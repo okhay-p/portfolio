@@ -1,6 +1,10 @@
 # Oakkar Phyo — portfolio
 
-Run `npm install` and `npm run dev`, then open http://localhost:5173.
+Requires Node.js 22.12 or newer. Run `npm install` and `npm run dev`, then open http://localhost:4321.
+
+The site uses Astro static generation. Homepage content and writeups are complete HTML at build time; JavaScript only enhances the homepage’s motion. There is no server adapter or request-time rendering. Cloudflare continues serving the generated `dist/` assets using the existing Wrangler configuration.
+
+Routes: `/` is the project collection, `/writing` lists learning notes, and `/writing/playkit-webrtc` is the first case study. PlayKit’s project card links to the writeup.
 
 The selected design is variant 3: a sidebar introduction and a collection of projects. The original three design variations are preserved on `prototype/portfolio-variants` at commit `62c1b16`. This settles the layout question; the main site uses the selected direction and has no prototype switcher.
 
@@ -12,7 +16,30 @@ Projects and public repository metadata were retrieved with GitHub CLI on 2026-1
 
 Skills include Hermes, OpenCode, and Codex under AI-assisted development.
 
-Use `npm run build` for a production build, and `npm run preview` to inspect it.
+Use `npm run check` for Astro/TypeScript validation, `npm run build` for a production build, and `npm run preview` to inspect it at http://localhost:4321 (use another port if the dev server is running). The preview serves built files; rebuild after changing content. `npm test` builds the site and verifies static content, canonical URLs, sitemap entries, local assets, and anchor navigation.
+
+## Adding a writeup
+
+Add a Markdown or MDX file to `src/content/writing/`. Its filename becomes its URL (for example, `new-project.mdx` becomes `/writing/new-project`). Frontmatter is validated by `src/content.config.ts`:
+
+```yaml
+---
+title: What building this project taught me
+description: A short introduction to the project and what I learned.
+project: Project name
+learningGoal: The specific technology or idea I wanted to learn.
+tags: [Technology, Topic]
+image: /images/project-image.webp
+liveUrl: https://example.com
+sourceUrl: https://github.com/owner/project
+---
+```
+
+`liveUrl` and `sourceUrl` are optional. Use second-level Markdown headings for the article’s sections; the layout generates its contents navigation from those headings. MDX allows embedding Astro components, as the PlayKit article does with `SignalingDiagram.astro`. Plain Markdown works for prose-only articles.
+
+The collection generates article routes, the learning-notes index, and page metadata. Add a `writeup` URL to the matching project in `src/data/projects.js` to link from its card. Set an optional `writeupLabel` for a specific topic; otherwise the link reads “What I learned.”
+
+The three exploratory layouts remain in `prototypes/writeups.html`. Run `npm run prototype` and open http://localhost:5173/prototypes/writeups.html to compare them. These are separate from Astro’s published routes and sitemap.
 
 Every production build regenerates `dist/sitemap.xml` from the built HTML pages using canonical URLs on `https://oakkarphyo.com`. Adding or removing a published HTML page updates the sitemap on the next build and deployment. `404.html` is excluded; page sections and external project links are not separate pages. `public/robots.txt` points crawlers to the sitemap.
 

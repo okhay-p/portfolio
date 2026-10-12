@@ -1,0 +1,86 @@
+---
+title: Game night taught me WebRTC.
+description: I built PlayKit for game nights with friends. Connecting our phones became a way to learn how browsers find each other, agree on a connection, and keep a shared game in sync.
+project: PlayKit
+learningGoal: Learn WebRTC by giving friends their own controls during a game, while keeping one browser in charge of the shared state.
+tags: [WebRTC, Data channels, Cloudflare]
+image: /images/poker-helper-v1.webp
+liveUrl: https://playkit.oakkarphyo.com
+sourceUrl: https://github.com/okhay-p/playkit
+---
+
+import SignalingDiagram from '../../components/SignalingDiagram.astro';
+
+## A useful reason to learn
+
+My friends and I had cards, but no chips or cash. That became PlayKit: a toolkit for game nights, starting with poker chip tracking and growing to include a chess clock, scorekeeping, tournaments, Undercover, and Imposter.
+
+Phone joining gave me a reason to learn WebRTC. Browsers need to connect across networks, and every player needs to see a consistent game. WebRTC handles the transport; the application still has to decide who can act and whose state is authoritative.
+
+The project uses data channels rather than audio or video. The goal is to send game actions and state between a host browser and friends’ phones.
+
+## From an invitation to a connection
+
+The host creates a room and shares an invitation. Each guest connects to the room’s signaling service. The host negotiates a separate peer connection with each guest, rather than connecting every phone to every other phone.
+
+<SignalingDiagram />
+
+1. **Meet through signaling.** Host and guest authenticate WebSocket connections to a Cloudflare Worker and room Durable Object. This gives them a way to pass connection messages.
+2. **Exchange an offer and answer.** The host creates the ordered `playkit-v1` data channel and sends an SDP offer. The guest sets the remote description and replies with an SDP answer describing its connection capabilities.
+3. **Exchange possible routes.** Each browser gathers ICE candidates and sends them through signaling. PlayKit queues incoming candidates until the remote description is set, then applies them.
+4. **Check a path and open the channel.** ICE tests candidate pairs and selects a working path. Once the encrypted data channel opens, the phone can request a seat. Host approval is still required.
+5. **Keep the host authoritative.** The host validates approved actions and sends game snapshots to guests. A signaling connection alone does not mean a phone is ready to play.
+
+These steps explain the roles; trickle ICE can exchange candidates while negotiation is still happening. Signaling is a channel the application supplies, rather than a built-in WebRTC service. See [WebRTC’s peer-connection guide](https://webrtc.org/getting-started/peer-connections).
+
+## ICE, STUN, and TURN
+
+A phone can have several possible network addresses. Routers and firewalls can make some of those routes unusable. These three pieces help browsers find a path.
+
+<dl className="protocols">
+  <div>
+    <dt>ICE</dt>
+    <dd><span>Interactive Connectivity Establishment</span>Gathers candidate addresses, checks candidate pairs for connectivity, and selects a working route. Candidates can be local, discovered through STUN, or allocated by TURN. ICE is the selection process, rather than a server that carries game data.</dd>
+  </div>
+  <div>
+    <dt>STUN</dt>
+    <dd><span>Session Traversal Utilities for NAT</span>Lets a browser discover the public IP address and port seen by a server. This provides a server-reflexive candidate that may allow a direct connection through a router. STUN discovery does not relay the game’s data or guarantee a direct path.</dd>
+  </div>
+  <div>
+    <dt>TURN</dt>
+    <dd><span>Traversal Using Relays around NAT</span>Provides a relay candidate. If ICE selects that route, encrypted peer traffic travels through the TURN server. It helps when direct routes cannot work, with server bandwidth and operating costs. Relay candidates may be gathered alongside direct candidates.</dd>
+  </div>
+</dl>
+
+Protocol background: [MDN’s WebRTC protocols](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Protocols).
+
+## Decisions and limits
+
+### One browser owns the game
+
+Guests submit actions; the host validates them and publishes authoritative snapshots. This keeps conflict resolution in one place. There is no automatic host election, so the host remains essential to the session.
+
+For poker, the host checks permissions, expected state revision, and whether an action is legal. It saves each accepted action locally before broadcasting the updated snapshot. Guests receive the game state they are allowed to see; host-only undo and deduplication records stay on the host.
+
+### Reliable, ordered game messages
+
+Game actions and snapshots use an ordered data channel. Reconnecting phones must receive a validated host snapshot before sending actions again; they do not submit speculative offline moves. A successful signaling connection alone does not enable game controls.
+
+### Keep setup separate from game state
+
+The room’s Durable Object routes connection metadata. Cards, bets, and game snapshots travel over the encrypted peer connection, rather than through the signaling service. Service operators can still observe network metadata.
+
+<aside className="deployment-limit">
+  <h3>The current deployment uses STUN only</h3>
+  <p>No TURN relay is enabled. Restrictive networks can prevent phones from connecting directly. PlayKit suggests trying the same Wi-Fi, reconnecting, or using the shared device. TURN support is an optional extension, not a deployed feature.</p>
+</aside>
+
+## What I want to explore next
+
+Test with physical phones across Wi-Fi and mobile data. Compare the selected ICE candidate pairs, observe recovery after a phone sleeps, and evaluate a TURN relay against its operating cost.
+
+Those are proposed experiments, not measured results. Building a connection is one part of the learning; understanding when it fails is the next.
+
+## Follow the implementation
+
+This writeup describes the implementation checked on 13 October 2026. The [phone-sync design](https://github.com/okhay-p/playkit/blob/main/docs/phone-sync.md) covers authority, recovery, and deployment limits. The [WebRTC transport](https://github.com/okhay-p/playkit/blob/main/src/sync/transport.ts) implements offer/answer negotiation, candidate queues, and data channels.
