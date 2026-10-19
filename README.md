@@ -32,10 +32,15 @@ tags: [Technology, Topic]
 image: /images/project-image.webp
 liveUrl: https://example.com
 sourceUrl: https://github.com/owner/project
+checked: 2026-10-20
+exhibit: project-id
+takeaways:
+  - One sentence a reader can keep.
+  - Another, drawn from the note itself.
 ---
 ```
 
-`liveUrl` and `sourceUrl` are optional. Use second-level Markdown headings for the article’s sections; the layout generates its contents navigation from those headings. MDX allows embedding Astro components, as the PlayKit article does with `SignalingDiagram.astro`. Plain Markdown works for prose-only articles.
+`liveUrl`, `sourceUrl`, `checked`, `exhibit`, and `takeaways` are optional. `checked` is the date the note was last verified against the project’s code, shown beside the reading time. `exhibit` is the matching `id` in `src/data/exhibits.js`, used for the “Back to the … exhibit” link. `takeaways` appear as “The short version” under the learning goal; keep them to facts the note already states. Use second-level Markdown headings for the article’s sections; the layout generates its contents navigation from those headings. MDX allows embedding Astro components, as the PlayKit note does with `SignalingDiagram.astro` and `Tradeoff.astro` (`<Tradeoff gain="…" cost="…" />` under a design decision). An ordered list placed directly after an `.architecture-diagram` figure gets numbered markers to match the diagram’s steps, and `- [ ]` task lists render as open experiments. Plain Markdown works for prose-only articles.
 
 The collection generates article routes, the learning-notes index, and page metadata. To link it from the homepage, add a link to the matching exhibit’s `links` in `src/data/exhibits.js`, for example `{ label: 'What I learned about …', href: '/writing/new-project' }`.
 

@@ -7,9 +7,16 @@ tags: [WebRTC, Data channels, Cloudflare]
 image: /images/poker-helper-v1.webp
 liveUrl: https://playkit.oakkarphyo.com
 sourceUrl: https://github.com/okhay-p/playkit
+checked: 2026-10-20
+exhibit: playkit
+takeaways:
+  - WebRTC doesn’t include signaling. PlayKit brings its own, a Cloudflare Worker and Durable Object, only to introduce the browsers.
+  - A data channel moves messages; it doesn’t decide who is right. One host browser validates every action and sends the authoritative game.
+  - STUN helps find a direct path but can’t guarantee one. Without a TURN relay, some networks can’t connect, and that’s PlayKit’s current limit.
 ---
 
 import SignalingDiagram from '../../components/SignalingDiagram.astro';
+import Tradeoff from '../../components/Tradeoff.astro';
 
 ## A useful reason to learn
 
@@ -60,15 +67,25 @@ Protocol background: [MDN’s WebRTC protocols](https://developer.mozilla.org/en
 
 Guests submit actions; the host validates them and publishes authoritative snapshots. This keeps conflict resolution in one place. There is no automatic host election, so the host remains essential to the session.
 
+<Tradeoff gain="Conflicts are resolved in one place, by one set of rules." cost="No host election: the session depends on the host staying around." />
+
 For poker, the host checks permissions, expected state revision, and whether an action is legal. It saves each accepted action locally before broadcasting the updated snapshot. Guests receive the game state they are allowed to see; host-only undo and deduplication records stay on the host.
 
 ### Reliable, ordered game messages
 
-Game actions and snapshots use an ordered data channel. Reconnecting phones must receive a validated host snapshot before sending actions again; they do not submit speculative offline moves. A successful signaling connection alone does not enable game controls.
+Game actions and snapshots use an ordered data channel. Each update carries a full validated snapshot at an increasing revision, so a phone that missed messages catches up from the next snapshot instead of replaying a history it never received.
+
+Reconnecting phones must receive a validated host snapshot before sending actions again; they do not submit speculative offline moves. A successful signaling connection alone does not enable game controls. Once the channel opens, the phone repeats its hello every second until the host replies, within a 30-second connection deadline, so a handshake lost during opening can’t leave it waiting forever.
+
+<Tradeoff gain="Phones never act on a stale or guessed game state." cost="A reconnecting phone waits for a fresh snapshot before it can play again." />
 
 ### Keep setup separate from game state
 
-The room’s Durable Object routes connection metadata. Cards, bets, and game snapshots travel over the encrypted peer connection, rather than through the signaling service. Service operators can still observe network metadata.
+The room’s Durable Object routes connection metadata. Cards, bets, and game snapshots travel over the encrypted peer connection, not through the signaling service.
+
+The invitation is kept out of the server’s way too. It lives in the URL fragment, the part after `#`, which browsers don’t send to the web host. The joining page removes it after saving its credentials, and signaling stores only a SHA-256 digest of it.
+
+<Tradeoff gain="Game data and invitations stay off the signaling service." cost="Service operators can still observe network metadata." />
 
 <aside className="deployment-limit">
   <h3>The current deployment uses STUN only</h3>
@@ -77,10 +94,13 @@ The room’s Durable Object routes connection metadata. Cards, bets, and game sn
 
 ## What I want to explore next
 
-Test with physical phones across Wi-Fi and mobile data. Compare the selected ICE candidate pairs, observe recovery after a phone sleeps, and evaluate a TURN relay against its operating cost.
+- [ ] Test with physical phones across Wi-Fi and mobile data.
+- [ ] Compare which ICE candidate pairs actually get selected.
+- [ ] Watch how a phone recovers after it goes to sleep.
+- [ ] Weigh a TURN relay against what it would cost to run.
 
-Those are proposed experiments, not measured results. Building a connection is one part of the learning; understanding when it fails is the next.
+These are proposed experiments, not measured results. Building a connection is one part of the learning; understanding when it fails is the next.
 
 ## Follow the implementation
 
-This writeup describes the implementation checked on 13 October 2026. The [phone-sync design](https://github.com/okhay-p/playkit/blob/main/docs/phone-sync.md) covers authority, recovery, and deployment limits. The [WebRTC transport](https://github.com/okhay-p/playkit/blob/main/src/sync/transport.ts) implements offer/answer negotiation, candidate queues, and data channels.
+This note describes the implementation as checked on 20 October 2026, at PlayKit commit `5822c97`. The [phone-sync design](https://github.com/okhay-p/playkit/blob/main/docs/phone-sync.md) covers authority, recovery, and deployment limits. The [WebRTC transport](https://github.com/okhay-p/playkit/blob/main/src/sync/transport.ts) implements offer/answer negotiation, candidate queues, and data channels.

@@ -11,33 +11,57 @@ interface Props {
   headings: MarkdownHeading[];
 }
 const { entry, headings } = Astro.props;
-const { title, description, project, tags, learningGoal, image, liveUrl, sourceUrl } = entry.data;
+const { title, description, project, tags, learningGoal, image, liveUrl, sourceUrl, checked, takeaways, exhibit } = entry.data;
 const contents = headings.filter(heading => heading.depth === 2);
+// Prose only: strip MDX imports, components, and markup before counting words.
+const words = (entry.body ?? '').replace(/^import .*$/gm, '').replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+const minutes = Math.max(1, Math.round(words / 220));
+const checkedOn = checked?.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+const backToProject = exhibit ? { href: `/#exhibit-${exhibit}`, label: `Back to the ${project} exhibit` } : { href: '/#work', label: 'Back to projects' };
 ---
 <BaseLayout title={`${title} — Oakkar Phyo`} description={description} image={image} article>
   <div class="writing-shell">
     <WritingHeader />
     <main id="main-content">
       <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/#work">Projects</a><span aria-hidden="true">/</span><a href="/writing">Learning notes</a><span aria-hidden="true">/</span><span aria-current="page">{project}</span></nav>
-      <header class="case-intro">
-        <h1>{title}</h1>
-        <p>{description}</p>
-        <ul class="writing-tags" aria-label="Topics">{tags.map(tag => <li>{tag}</li>)}</ul>
-        <div class="writing-links">
-          {liveUrl && <a href={liveUrl} target="_blank" rel="noopener noreferrer">Try {project}</a>}
-          {sourceUrl && <a href={sourceUrl} target="_blank" rel="noopener noreferrer">View source</a>}
+      <header class="case-intro case-hero">
+        <div>
+          <h1>{title}</h1>
+          <p>{description}</p>
+          <p class="case-meta">
+            {checkedOn && <span>Checked against the code on <time datetime={checked?.toISOString().slice(0, 10)}>{checkedOn}</time></span>}
+            <span>{minutes} min read</span>
+          </p>
+          <ul class="writing-tags" aria-label="Topics">{tags.map(tag => <li>{tag}</li>)}</ul>
+          <div class="writing-links">
+            {liveUrl && <a class="primary" href={liveUrl} target="_blank" rel="noopener noreferrer">Try {project} ↗</a>}
+            {sourceUrl && <a href={sourceUrl} target="_blank" rel="noopener noreferrer">View source ↗</a>}
+          </div>
         </div>
+        <figure class="case-exhibit" aria-hidden="true">
+          <img src={image} alt="" width="1200" height="800" fetchpriority="high" />
+          <figcaption>{project}</figcaption>
+        </figure>
       </header>
       <div class="case-layout">
         <nav class="case-contents" aria-label="Writeup contents">
-          <p>In this writeup</p>
+          <p>In this note</p>
           <a href="#learning-goal">The learning goal</a>
           {contents.map(heading => <a href={`#${heading.slug}`}>{heading.text}</a>)}
         </nav>
         <article class="case-body">
-          <aside class="learning-goal" id="learning-goal" aria-labelledby="goal-title"><h2 id="goal-title">The learning goal</h2><p>{learningGoal}</p></aside>
+          <aside class="learning-goal" id="learning-goal" aria-labelledby="goal-title">
+            <h2 id="goal-title">The learning goal</h2>
+            <p>{learningGoal}</p>
+            {takeaways && (
+              <>
+                <h3>The short version</h3>
+                <ul>{takeaways.map(takeaway => <li>{takeaway}</li>)}</ul>
+              </>
+            )}
+          </aside>
           <div class="prose"><slot /></div>
-          <div class="article-back"><a href="/writing">More learning notes</a><a href="/#work">Back to projects</a></div>
+          <div class="article-back"><a href={backToProject.href}>{backToProject.label}</a><a href="/writing">More learning notes</a></div>
         </article>
       </div>
     </main>

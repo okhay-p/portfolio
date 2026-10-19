@@ -13,6 +13,12 @@ const writing = defineCollection({
     image: z.string(),
     liveUrl: z.url().optional(),
     sourceUrl: z.url().optional(),
+    // Date the writeup was last checked against the project's code.
+    checked: z.coerce.date().optional(),
+    // Three or so sentences readers can take away without reading the whole note.
+    takeaways: z.array(z.string()).optional(),
+    // The homepage exhibit this note belongs to, for the link back to the cabinet.
+    exhibit: z.string().optional(),
   }),
 });
 

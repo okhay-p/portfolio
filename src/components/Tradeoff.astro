@@ -1,0 +1,12 @@
+---
+// What a design decision buys and what it costs, shown under the decision in a writeup.
+interface Props {
+  gain: string;
+  cost: string;
+}
+const { gain, cost } = Astro.props;
+---
+<dl class="tradeoff">
+  <div><dt>Gain</dt><dd>{gain}</dd></div>
+  <div><dt>Cost</dt><dd>{cost}</dd></div>
+</dl>
