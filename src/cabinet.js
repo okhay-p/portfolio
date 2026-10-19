@@ -108,5 +108,18 @@ export function initializeCabinet(root) {
 
   // Shared links such as /#exhibit-playkit open straight onto that placard.
   const linked = placards.findIndex(placard => '#' + placard.id === location.hash);
-  if (linked >= 0) { scrollTo(0, 0); open(linked); }
+  if (linked >= 0) {
+    scrollTo(0, 0);
+    open(linked);
+    // The browser's initial fragment jump runs after module initialization and
+    // can scroll the placard past its Close control. Restore the dialog after it.
+    const settleLink = () => requestAnimationFrame(() => {
+      if (current !== linked) return;
+      scrollTo(0, 0);
+      catalogue.scrollTop = 0;
+      catalogue.focus({ preventScroll: true });
+    });
+    if (document.readyState === 'complete') settleLink();
+    else addEventListener('load', settleLink, { once: true });
+  }
 }
