@@ -1,0 +1,28 @@
+---
+// The host's review of one guest action, from submission to the published snapshot.
+---
+<figure class="authority-diagram" aria-labelledby="authority-title">
+  <div class="diagram-head"><h3 id="authority-title">One action, reviewed by the host</h3><input class="play-toggle" type="checkbox" id="authority-play" /><label class="play-control" for="authority-play"><span class="play-knob" aria-hidden="true"></span>Animate an action</label></div>
+  <ol class="authority-flow">
+    <li class="flow-guest">
+      <p class="flow-title">Guest phone</p>
+      <p>Submits a betting action for its own seat, with the revision it expects.</p>
+      <p class="token action-token"><span class="token-chip" aria-hidden="true"></span>Action, expects r41</p>
+    </li>
+    <li class="flow-host">
+      <p class="flow-title">Host browser</p>
+      <ul class="checks" aria-label="Checks before accepting">
+        <li>Is this player allowed?</li>
+        <li>Is the game still at r41?</li>
+        <li>Is the move legal?</li>
+      </ul>
+      <p class="save-step">Saves the accepted action locally</p>
+    </li>
+    <li class="flow-phones">
+      <p class="flow-title">Approved phones</p>
+      <p>Receive a full snapshot of the state each one is allowed to see.</p>
+      <p class="token snapshot-token"><span class="token-card" aria-hidden="true"></span>Snapshot r42</p>
+    </li>
+  </ol>
+  <figcaption>Guests propose; only the host decides. Undo and deduplication records never leave the host.</figcaption>
+</figure>

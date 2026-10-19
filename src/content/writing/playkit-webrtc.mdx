@@ -17,6 +17,10 @@ takeaways:
 
 import SignalingDiagram from '../../components/SignalingDiagram.astro';
 import Tradeoff from '../../components/Tradeoff.astro';
+import PathManifest from '../../components/PathManifest.astro';
+import IceRoutes from '../../components/IceRoutes.astro';
+import HostAuthority from '../../components/HostAuthority.astro';
+import SnapshotTimeline from '../../components/SnapshotTimeline.astro';
 
 ## A useful reason to learn
 
@@ -40,9 +44,13 @@ The host creates a room and shares an invitation. Each guest connects to the roo
 
 These steps explain the roles; trickle ICE can exchange candidates while negotiation is still happening. Signaling is a channel the application supplies, rather than a built-in WebRTC service. See [WebRTC’s peer-connection guide](https://webrtc.org/getting-started/peer-connections).
 
+<PathManifest />
+
 ## ICE, STUN, and TURN
 
 A phone can have several possible network addresses. Routers and firewalls can make some of those routes unusable. These three pieces help browsers find a path.
+
+<IceRoutes />
 
 <dl className="protocols">
   <div>
@@ -71,11 +79,15 @@ Guests submit actions; the host validates them and publishes authoritative snaps
 
 For poker, the host checks permissions, expected state revision, and whether an action is legal. It saves each accepted action locally before broadcasting the updated snapshot. Guests receive the game state they are allowed to see; host-only undo and deduplication records stay on the host.
 
+<HostAuthority />
+
 ### Reliable, ordered game messages
 
 Game actions and snapshots use an ordered data channel. Each update carries a full validated snapshot at an increasing revision, so a phone that missed messages catches up from the next snapshot instead of replaying a history it never received.
 
 Reconnecting phones must receive a validated host snapshot before sending actions again; they do not submit speculative offline moves. A successful signaling connection alone does not enable game controls. Once the channel opens, the phone repeats its hello every second until the host replies, within a 30-second connection deadline, so a handshake lost during opening can’t leave it waiting forever.
+
+<SnapshotTimeline />
 
 <Tradeoff gain="Phones never act on a stale or guessed game state." cost="A reconnecting phone waits for a fresh snapshot before it can play again." />
 

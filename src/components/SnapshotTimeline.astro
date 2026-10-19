@@ -1,0 +1,22 @@
+---
+// A phone that misses revisions while offline catches up from one full snapshot.
+---
+<figure class="architecture-diagram snapshot-timeline">
+<div class="diagram-head"><h3>Catching up after a gap</h3><span>Time runs left to right</span></div>
+<div class="diagram-canvas" role="region" aria-label="Scrollable snapshot timeline" tabindex="0"><svg viewBox="0 0 640 250" role="img" aria-labelledby="snapshot-timeline-title snapshot-timeline-desc"><title id="snapshot-timeline-title">Missed revisions are skipped, not replayed</title><desc id="snapshot-timeline-desc">The host publishes snapshots r40, r41, r42, and r43. The phone receives r40, then goes offline and misses r41 and r42. After it reconnects, the host sends a validated snapshot at the current revision, r42, which contains the full game. The phone's controls stay off from the moment it disconnects until that snapshot arrives. It then receives r43 as usual.</desc>
+<defs><marker id="timeline-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10" fill="#527544"/></marker><marker id="timeline-ink" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10" fill="#8f8677"/></marker><pattern id="timeline-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="#f3ebde"/><path d="M0 0V8" stroke="#e0d4c1" stroke-width="4"/></pattern></defs>
+<text x="20" y="64">Host</text><text x="20" y="174">Phone</text>
+<path class="axis" d="M84 60H620" marker-end="url(#timeline-ink)"/>
+<path class="axis" d="M84 170H232M380 170H620"/><rect x="232" y="158" width="148" height="24" rx="4" fill="url(#timeline-hatch)"/><text class="small" x="306" y="174" text-anchor="middle">Asleep / offline</text>
+<g class="revision"><rect x="128" y="46" width="44" height="28" rx="5"/><text x="150" y="65" text-anchor="middle">r40</text></g>
+<g class="revision"><rect x="248" y="46" width="44" height="28" rx="5"/><text x="270" y="65" text-anchor="middle">r41</text></g>
+<g class="revision"><rect x="318" y="46" width="44" height="28" rx="5"/><text x="340" y="65" text-anchor="middle">r42</text></g>
+<g class="revision"><rect x="528" y="46" width="44" height="28" rx="5"/><text x="550" y="65" text-anchor="middle">r43</text></g>
+<path class="delivered" d="M150 78V154" marker-end="url(#timeline-green)"/><path class="delivered" d="M550 78V154" marker-end="url(#timeline-green)"/>
+<path class="missed" d="M270 78V150M340 78V150"/><rect x="246" y="98" width="118" height="17" rx="3" fill="#fbf7f0"/><text class="small" x="305" y="110" text-anchor="middle">Missed, never replayed</text>
+<path class="resync" d="M392 170V146" marker-end="url(#timeline-ink)"/><text class="small" x="392" y="200" text-anchor="middle">Reconnects</text>
+<g class="revision current"><rect x="418" y="46" width="64" height="28" rx="5"/><text x="450" y="65" text-anchor="middle">r42</text></g><text class="small" x="450" y="36" text-anchor="middle">Current snapshot</text>
+<path class="delivered strong" d="M450 78V154" marker-end="url(#timeline-green)"/><text x="460" y="122" style="fill:#527544">Full game</text>
+<rect class="controls on" x="84" y="218" width="148" height="10" rx="5"/><rect class="controls off" x="232" y="218" width="218" height="10" rx="5"/><rect class="controls on" x="450" y="218" width="170" height="10" rx="5"/>
+<text class="small" x="158" y="244" text-anchor="middle">Controls on</text><text class="small" x="341" y="244" text-anchor="middle">Controls off until a validated snapshot</text><text class="small" x="535" y="244" text-anchor="middle">Controls on</text>
+</svg></div><figcaption>Each snapshot carries the whole game, so a phone that missed r41 and r42 needs only the current one. It doesn’t submit speculative moves made while it was offline.</figcaption></figure>

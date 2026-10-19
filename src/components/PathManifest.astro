@@ -1,0 +1,30 @@
+---
+// What travels over signaling and what travels over the peer connection, side by side.
+---
+<figure class="path-manifest" aria-labelledby="path-manifest-title">
+  <div class="diagram-head"><h3 id="path-manifest-title">Two paths, two kinds of message</h3></div>
+  <div class="manifest-drawers">
+    <section class="manifest-drawer setup" aria-labelledby="manifest-setup">
+      <p class="manifest-plate" id="manifest-setup">Signaling</p>
+      <p class="manifest-route">WebSocket to the Cloudflare Worker and room Durable Object</p>
+      <ul>
+        <li>SDP offer and answer</li>
+        <li>ICE candidates</li>
+        <li>Connection metadata</li>
+        <li>A SHA-256 digest of the invitation</li>
+      </ul>
+      <p class="manifest-when">Used to introduce the browsers</p>
+    </section>
+    <section class="manifest-drawer game" aria-labelledby="manifest-game">
+      <p class="manifest-plate" id="manifest-game">Data channel</p>
+      <p class="manifest-route">Encrypted, ordered <code>playkit-v1</code> channel between the host and one guest</p>
+      <ul>
+        <li>Seat requests</li>
+        <li>Game actions</li>
+        <li>Authoritative snapshots, including cards and bets</li>
+      </ul>
+      <p class="manifest-when">Used for the game once the channel opens</p>
+    </section>
+  </div>
+  <figcaption>The invitation itself travels on neither path. It sits in the URL fragment, which browsers don’t send to the web host.</figcaption>
+</figure>
