@@ -44,6 +44,8 @@ takeaways:
 
 The collection generates article routes, the learning-notes index, and page metadata. To link it from the homepage, add a link to the matching exhibit’s `links` in `src/data/exhibits.js`, for example `{ label: 'What I learned about …', href: '/writing/new-project' }`.
 
+The WebRTC note also uses `PathManifest.astro`, `IceRoutes.astro`, `HostAuthority.astro`, and `SnapshotTimeline.astro` to explain message paths, route discovery, host validation, and reconnecting phones. The handshake and host-action animations are opt-in checkbox controls driven by CSS; the note still ships without JavaScript. Reduced-motion preferences hide these controls and keep the diagrams static.
+
 The three exploratory writeup layouts remain in `prototypes/writeups.html`, beside the homepage redesign prototypes. Run `npm run prototype` and open http://localhost:5173/prototypes/ to browse them. These are separate from Astro’s published routes and sitemap.
 
 ## Adding an exhibit

@@ -219,6 +219,8 @@ body{background:radial-gradient(90% 60% at 30% 0%,#fbf7f0 0%,#f1e9dc 45%,#e9dfcf
 @keyframes au-check-3{0%,44%{opacity:.15;transform:scale(.8)}50%,92%{opacity:1;transform:none}100%{opacity:.15;transform:scale(.8)}}
 @keyframes au-save{0%,54%{opacity:.35}60%,92%{opacity:1}100%{opacity:.35}}
 @keyframes au-snapshot{0%,64%{opacity:0;transform:translateX(-24px)}74%,90%{opacity:1;transform:none}100%{opacity:0;transform:none}}
+@keyframes au-action-vertical{0%,14%{opacity:1;transform:none}22%{opacity:0;transform:translateY(28px)}88%{opacity:0;transform:translateY(-8px)}100%{opacity:1;transform:none}}
+@keyframes au-snapshot-vertical{0%,64%{opacity:0;transform:translateY(-24px)}74%,90%{opacity:1;transform:none}100%{opacity:0;transform:none}}
 @media(prefers-reduced-motion:reduce){.play-toggle,.play-control{display:none}}
 
 /* Writing index */
@@ -263,6 +265,8 @@ body{background:radial-gradient(90% 60% at 30% 0%,#fbf7f0 0%,#f1e9dc 45%,#e9dfcf
   .manifest-drawers{grid-template-columns:minmax(0,1fr);gap:24px}
   .authority-diagram{padding:16px}
   .prose .authority-flow{grid-template-columns:minmax(0,1fr);gap:30px}
+  .authority-diagram:has(.play-toggle:checked) .action-token{animation-name:au-action-vertical}
+  .authority-diagram:has(.play-toggle:checked) .snapshot-token{animation-name:au-snapshot-vertical}
   .authority-flow>li+li::before{left:calc(50% - 1px);top:-26px;width:2px;height:20px}
   .authority-flow>li+li::after{left:calc(50% - 5px);top:-10px;border-width:7px 5px 0 5px;border-color:#527544 transparent transparent transparent}
   .legend{gap:12px}

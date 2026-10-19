@@ -95,9 +95,9 @@ Reconnecting phones must receive a validated host snapshot before sending action
 
 The room’s Durable Object routes connection metadata. Cards, bets, and game snapshots travel over the encrypted peer connection, not through the signaling service.
 
-The invitation is kept out of the server’s way too. It lives in the URL fragment, the part after `#`, which browsers don’t send to the web host. The joining page removes it after saving its credentials, and signaling stores only a SHA-256 digest of it.
+The invitation stays out of the initial page request. It lives in the URL fragment, the part after `#`, which browsers don’t send to the web host. The joining page removes it after saving its credentials. The phone sends it during the signaling handshake, and the signaling service stores only a SHA-256 digest of it.
 
-<Tradeoff gain="Game data and invitations stay off the signaling service." cost="Service operators can still observe network metadata." />
+<Tradeoff gain="Game data stays off the signaling service, which stores only invitation digests." cost="The service receives invitations during authentication and can observe network metadata." />
 
 <aside className="deployment-limit">
   <h3>The current deployment uses STUN only</h3>
