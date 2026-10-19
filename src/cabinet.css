@@ -12,7 +12,9 @@ body{background:radial-gradient(90% 60% at 30% 0%,#fbf7f0 0%,#f1e9dc 45%,#e9dfcf
 
 /* Stage */
 .stage{position:relative;overflow:hidden;padding-top:10px}
-.cabinet-open .stage{overflow:visible}
+/* The zoom needs to spill vertically, but the glow behind the scene must never widen the page:
+   Android Chrome grows the layout viewport to fit, which widens the fixed placard sheet off-screen. */
+.cabinet-open .stage{overflow:visible;overflow:clip visible}
 .intro{position:relative;z-index:3;text-align:center;max-width:660px;margin:0 auto 34px;padding:0 20px;transition:opacity .4s}
 .intro-eyebrow{font-size:var(--text-xs);letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--wall-muted);margin-bottom:14px}
 .intro h1{font-size:clamp(2.4rem,4.6vw,4rem);line-height:1.04;font-weight:560}
@@ -23,8 +25,8 @@ body{background:radial-gradient(90% 60% at 30% 0%,#fbf7f0 0%,#f1e9dc 45%,#e9dfcf
 
 .cabinet{position:relative;background:linear-gradient(180deg,#f8f2e8,#f4ece0);border-radius:10px 10px 4px 4px;padding:0 16px 16px;
   box-shadow:0 1px 0 #fff inset,0 0 0 1px #dccdb7,18px 26px 40px -18px #6b553333,40px 60px 80px -40px #6b553340}
-.crown{height:46px;display:flex;align-items:center;justify-content:center;gap:14px;font-size:.6875rem;letter-spacing:.32em;font-weight:600;color:#9b8a70;text-transform:uppercase}
-.crown::before,.crown::after{content:'';height:1px;width:60px;background:linear-gradient(90deg,#0000,#bfae93,#0000)}
+.crown{min-height:46px;text-align:center;display:flex;align-items:center;justify-content:center;gap:14px;font-size:.6875rem;letter-spacing:.32em;font-weight:600;color:#9b8a70;text-transform:uppercase}
+.crown::before,.crown::after{content:'';height:1px;flex:0 1 60px;min-width:12px;background:linear-gradient(90deg,#0000,#bfae93,#0000)}
 .shelves{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .plinth{position:absolute;left:-6px;right:-6px;bottom:-14px;height:16px;border-radius:3px;background:linear-gradient(#e6d9c5,#d2c1a6);box-shadow:0 8px 14px -6px #6b553355}
 
@@ -37,7 +39,7 @@ body{background:radial-gradient(90% 60% at 30% 0%,#fbf7f0 0%,#f1e9dc 45%,#e9dfcf
   box-shadow:inset 0 14px 16px -12px #3b2b1a80,inset 0 -6px 10px -8px #3b2b1a40}
 .niche::after{content:'';position:absolute;left:8%;right:8%;top:0;height:3px;border-radius:0 0 3px 3px;background:#fffbe9;box-shadow:0 0 14px 4px #fff4cf;z-index:3;opacity:.85;transition:opacity .4s,box-shadow .4s}
 .niche.archived .art{filter:saturate(.7)}
-.plaque{position:absolute;left:50%;bottom:9px;transform:translateX(-50%);z-index:4;white-space:nowrap;background:var(--brass);color:#3d2f17;
+.plaque{position:absolute;left:50%;bottom:9px;transform:translateX(-50%);z-index:4;width:max-content;max-width:calc(100% - 12px);text-align:center;background:var(--brass);color:#3d2f17;
   font-size:.6875rem;letter-spacing:.06em;font-weight:600;padding:3px 10px;border-radius:3px;box-shadow:0 1px 0 #fff8 inset,0 2px 4px #3b2b1a55;transition:transform .35s var(--ease-out)}
 .plaque span{opacity:.6;margin-right:6px}
 .niche-note{--backdrop:radial-gradient(70% 80% at 40% 30%,#fbe9d6,#efd6bd)}
@@ -114,7 +116,7 @@ body{background:radial-gradient(90% 60% at 30% 0%,#fbf7f0 0%,#f1e9dc 45%,#e9dfcf
 .cabinet-open .intro,.cabinet-open .bubble{opacity:0}
 
 /* Curator's note */
-.curator-note{width:min(1120px,92vw);margin:72px auto 0;display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(30px,5vw,80px);padding-bottom:48px}
+.curator-note{width:min(1120px,92vw);margin:72px auto 0;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(30px,5vw,80px);padding-bottom:48px}
 .js .curator-note{margin-top:40px}
 .curator-note .label{font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--wall-muted)}
 .curator-note h2{font-size:clamp(1.9rem,3vw,2.6rem);line-height:1.1;font-weight:560;margin:10px 0 16px}
@@ -125,7 +127,7 @@ body{background:radial-gradient(90% 60% at 30% 0%,#fbf7f0 0%,#f1e9dc 45%,#e9dfcf
 .tools img{width:16px;height:16px;border-radius:4px}
 .visitors{margin-top:28px;padding:22px 24px;border-radius:12px;background:#fbf7f0;border:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
 .visitors b{font:560 1.25rem Fraunces,Georgia,serif}
-.visitors div{display:flex;gap:10px}
+.visitors div{display:flex;flex-wrap:wrap;gap:10px}
 .visitors a{padding:10px 16px;border-radius:999px;border:1px solid #d9cdb9;font-size:.9375rem;font-weight:500}
 .visitors a:hover{background:#fff}
 .museum-footer{width:min(1120px,92vw);margin:0 auto}
@@ -134,12 +136,13 @@ body{background:radial-gradient(90% 60% at 30% 0%,#fbf7f0 0%,#f1e9dc 45%,#e9dfcf
 @media(max-width:860px){
   .museum-header nav{gap:14px}
   .intro{text-align:left}
-  .scene{grid-template-columns:1fr;width:calc(100vw - 32px);margin-top:170px}
+  .scene{grid-template-columns:minmax(0,1fr);width:calc(100vw - 32px);margin-top:170px}
   .curator{position:absolute;right:18px;bottom:calc(100% - 4px);width:58px;z-index:3}
   .curator img{margin-bottom:0}
   .curator::after{display:none}
   .bubble{right:calc(100% + 6px);top:18px;font-size:.8125rem;max-width:190px;padding:8px 12px}
-  .shelves{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  /* Two niches across, dropping to one when larger text would crowd the plaques. */
+  .shelves{grid-template-columns:repeat(auto-fit,minmax(max(min(100%,8rem),calc(50% - 5px)),1fr));gap:10px}
   .cabinet{padding:0 10px 10px}
   .plaque{font-size:.625rem;padding:2px 7px;bottom:6px}
   .plaque span{display:none}
@@ -148,7 +151,7 @@ body{background:radial-gradient(90% 60% at 30% 0%,#fbf7f0 0%,#f1e9dc 45%,#e9dfcf
   .cabinet-open .dim{background:#2b2a2655}
   .cabinet-open .niche:not(.current){filter:none}
   .placard dl div{grid-template-columns:1fr;gap:2px}
-  .curator-note{grid-template-columns:1fr}
+  .curator-note{grid-template-columns:minmax(0,1fr)}
 }
 @media(max-width:480px){
   .museum-header{flex-wrap:wrap}
