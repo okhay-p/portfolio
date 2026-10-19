@@ -1,6 +1,6 @@
 # Instagram card
 
-Generated with the built-in image_gen tool on 2026-10-08. Asset: `public/images/instagram-creative-card-v1.png` (1536 × 1024). The image is a generated reinterpretation of the user's own renders, composed as a miniature gallery, rather than an original render or screenshot.
+Generated with the built-in image_gen tool on 2026-10-08. Asset: `public/images/instagram-creative-card-v1.webp` (1200 × 800, converted on 2026-10-20 from the original 1536 × 1024 PNG, which remains in git history). The image is a generated reinterpretation of the user's own renders, composed as a miniature gallery, rather than an original render or screenshot.
 
 Source references, retrieved from the public Instagram page:
 

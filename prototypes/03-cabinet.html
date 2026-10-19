@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Prototype 03 · The Cabinet — Oakkar</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+@font-face{font-family:Fraunces;src:url('/fonts/fraunces-variable.ttf');font-weight:100 900;font-display:swap}
+:root{
+  --wall:#efe7da;--ink:#2b2a26;--muted:#6f685c;--wood:#f4ece0;--wood-edge:#dccdb7;--wood-dark:#c9b79c;
+  --brass:linear-gradient(180deg,#ecd59f,#caa45f 60%,#b8914d);--clay:#b76744;
+  --ease:cubic-bezier(.22,1,.36,1);--panel:420px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font:16px/1.6 'DM Sans',sans-serif;font-synthesis:none;
+  background:radial-gradient(90% 60% at 30% 0%,#fbf7f0 0%,#f1e9dc 45%,#e9dfcf 100%) fixed,var(--wall)}
+body.zoomed{overflow:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+h1,h2,h3,p{margin:0}
+:focus-visible{outline:2px solid var(--clay);outline-offset:4px}
+.serif{font-family:Fraunces,Georgia,serif;font-optical-sizing:auto;font-variation-settings:'SOFT' 100,'WONK' 1;letter-spacing:-.02em}
+.eyebrow{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+
+header.site{display:flex;justify-content:space-between;align-items:center;padding:28px clamp(20px,4vw,56px);position:relative;z-index:5}
+.wordmark{font-size:2rem;font-weight:750;letter-spacing:-1.5px;line-height:1}
+header.site nav{display:flex;gap:22px;font-size:.9375rem;color:var(--muted)}
+header.site nav a:hover{color:var(--ink)}
+
+/* Scene */
+.stage{position:relative;overflow:hidden;padding:10px 0 0}
+.intro{text-align:center;max-width:640px;margin:0 auto 34px;padding:0 20px;transition:opacity .4s}
+.intro h1{font-size:clamp(2.4rem,4.6vw,4rem);line-height:1.04;font-weight:560}
+.intro p{color:var(--muted);margin-top:12px;font-size:1.0625rem}
+.scene{position:relative;width:min(1120px,92vw);margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) clamp(130px,14.5vw,176px);gap:clamp(18px,3vw,44px);align-items:end;transform-origin:0 0;transition:transform 1s var(--ease)}
+.scene::before{content:'';position:absolute;left:-20%;right:-20%;top:-40%;height:120%;background:radial-gradient(40% 50% at 40% 40%,#fffaf0cc,#fff0 70%);pointer-events:none;z-index:-1}
+.floor{position:relative;height:110px;margin-top:-1px;background:linear-gradient(#e2d5c0,#efe6d8 70%,#f1e9dc00);box-shadow:inset 0 1px 0 #cdbda4}
+
+.cabinet{position:relative;background:linear-gradient(180deg,#f8f2e8,var(--wood));border-radius:10px 10px 4px 4px;padding:0 16px 16px;
+  box-shadow:0 1px 0 #fff inset,0 0 0 1px var(--wood-edge),18px 26px 40px -18px #6b553333,40px 60px 80px -40px #6b553340}
+.crown{height:46px;display:flex;align-items:center;justify-content:center;gap:14px;font-size:.6875rem;letter-spacing:.32em;font-weight:600;color:#9b8a70}
+.crown::before,.crown::after{content:'';height:1px;width:60px;background:linear-gradient(90deg,#0000,#bfae93,#0000)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.plinth{position:absolute;left:-6px;right:-6px;bottom:-14px;height:16px;border-radius:3px;background:linear-gradient(#e6d9c5,#d2c1a6);box-shadow:0 8px 14px -6px #6b553355}
+
+.niche{position:relative;aspect-ratio:3/2;border-radius:5px;overflow:hidden;background:#e9e2f2;display:block;text-align:left;
+  box-shadow:inset 0 0 0 1px #00000014;transition:filter .5s,opacity .5s}
+.niche .art{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .9s var(--ease)}
+/* Depth: a dark lip at the top, soft side shading, and a warm strip light. */
+.niche::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(180deg,#fff6dc66,#fff6dc00 26%),linear-gradient(90deg,#0000001a,#0000 12%,#0000 88%,#0000001a);
+  box-shadow:inset 0 14px 16px -12px #3b2b1a80,inset 0 -6px 10px -8px #3b2b1a40;transition:opacity .4s}
+.niche::after{content:'';position:absolute;left:8%;right:8%;top:0;height:3px;border-radius:0 0 3px 3px;background:#fffbe9;box-shadow:0 0 14px 4px #fff4cf;z-index:3;opacity:.85;transition:opacity .4s}
+.niche:hover .art,.niche:focus-visible .art{transform:scale(1.045)}
+.niche:hover::after,.niche:focus-visible::after{opacity:1;box-shadow:0 0 22px 8px #fff4cf}
+.plaque{position:absolute;left:50%;bottom:9px;transform:translateX(-50%);z-index:4;white-space:nowrap;background:var(--brass);color:#3d2f17;
+  font-size:.6875rem;letter-spacing:.06em;font-weight:600;padding:3px 10px;border-radius:3px;box-shadow:0 1px 0 #fff8 inset,0 2px 4px #3b2b1a55;transition:transform .35s var(--ease)}
+.plaque span{opacity:.6;margin-right:6px}
+.niche:hover .plaque,.niche:focus-visible .plaque{transform:translate(-50%,-3px)}
+.niche.archived .art{filter:saturate(.7)}
+
+.note-exhibit{background:radial-gradient(70% 80% at 40% 30%,#fbe9d6,#efd6bd)}
+.note-exhibit .paper{position:absolute;left:50%;top:48%;width:56%;aspect-ratio:3/3.6;transform:translate(-50%,-50%) rotate(-4deg);background:#fffdf8;border-radius:3px;padding:9% 9%;
+  box-shadow:0 1px 0 #fff inset,6px 14px 18px -8px #7a4e2a66;display:flex;flex-direction:column;gap:6%;transition:transform .7s var(--ease)}
+.note-exhibit .paper b{font:560 clamp(.62rem,1.35vw,1.05rem)/1.12 Fraunces,serif;font-variation-settings:'SOFT' 100,'WONK' 1}
+.note-exhibit .paper i{display:block;height:3px;border-radius:2px;background:#e6ddd0}
+.note-exhibit .paper i:nth-of-type(2){width:80%}.note-exhibit .paper i:nth-of-type(3){width:60%}
+.note-exhibit .pin{position:absolute;left:50%;top:-5px;width:10px;height:10px;border-radius:50%;background:var(--clay);transform:translateX(-50%);box-shadow:0 2px 2px #0004}
+.niche:hover .paper{transform:translate(-50%,-52%) rotate(-1deg)}
+.empty-exhibit{background:radial-gradient(70% 80% at 50% 30%,#efe9df,#e2d8c8)}
+.empty-exhibit .ring{position:absolute;left:50%;top:60%;width:46%;aspect-ratio:3/1;transform:translate(-50%,-50%);border:2px dashed #bfae93;border-radius:50%}
+.empty-exhibit .q{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);font:500 clamp(1.4rem,2.6vw,2.1rem) Fraunces,serif;color:#b3a283;transition:transform .5s var(--ease)}
+.niche:hover .q{transform:translate(-50%,-62%) rotate(8deg)}
+
+/* Curator */
+.curator{position:relative;align-self:end}
+.curator img{display:block;width:100%;height:auto;margin-bottom:-14px;position:relative;z-index:1;filter:drop-shadow(10px 18px 14px #6b553333)}
+.curator::after{content:'';position:absolute;left:8%;right:2%;bottom:-24px;height:26px;border-radius:50%;background:radial-gradient(closest-side,#5a442a55,#5a442a00)}
+.bubble{position:absolute;right:62%;top:-6%;width:max-content;max-width:230px;background:#fffdf8;border-radius:16px 16px 4px 16px;padding:11px 16px;font-size:.9375rem;line-height:1.4;
+  box-shadow:0 12px 30px -12px #6b553366,0 0 0 1px #0000000a;z-index:2;transition:opacity .2s,transform .3s var(--ease)}
+.bubble.swap{opacity:0;transform:translateY(4px)}
+
+/* Placard */
+.dim{position:fixed;inset:0;background:#2b2a2633;opacity:0;pointer-events:none;transition:opacity .6s;z-index:20}
+.zoomed .dim{opacity:1;pointer-events:auto;background:#0000}
+.zoomed .niche:not(.current){filter:brightness(.7) saturate(.6)}
+.zoomed .intro,.zoomed .bubble{opacity:0}
+.placard{position:fixed;top:0;right:0;bottom:0;width:var(--panel);z-index:30;background:#fbf7f0;box-shadow:-20px 0 60px -20px #3b2b1a55;
+  transform:translateX(105%);visibility:hidden;transition:transform .7s var(--ease),visibility 0s .7s;display:flex;flex-direction:column;padding:34px 34px 28px;overflow:auto}
+.scene{z-index:2}.zoomed .stage{overflow:visible}.placard:focus{outline:none}
+.zoomed .placard{transform:none;visibility:visible;transition:transform .7s var(--ease)}
+.placard .bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
+.placard .bar button{font-size:.875rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+.placard .bar button:hover{color:var(--ink)}
+.placard .no{font:500 .8125rem 'DM Sans',sans-serif;letter-spacing:.16em;color:var(--muted)}
+.placard h2{font-size:2.4rem;line-height:1.05;font-weight:560;margin:10px 0 6px}
+.placard .status{display:inline-flex;align-items:center;gap:8px;font-size:.875rem;color:var(--muted)}
+.placard .status i{width:7px;height:7px;border-radius:50%;background:#7e9e6d}
+.placard .status.archived i{background:#a59a8c}.placard .status.soon i{background:transparent;border:1.5px dashed #a59a8c}
+.placard .sheet-art{display:none}
+.placard dl{margin:26px 0 0;border-top:1px solid #e3d9c8}
+.placard dl div{padding:12px 0;border-bottom:1px solid #e3d9c8;display:grid;grid-template-columns:110px 1fr;gap:12px}
+.placard dt{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.placard dd{margin:0;font-size:.9375rem}
+.placard blockquote{margin:26px 0 0;font:italic 400 1.25rem/1.45 Fraunces,serif;font-variation-settings:'SOFT' 100,'WONK' 1;color:#3d3a33;padding-left:16px;border-left:2px solid var(--clay)}
+.placard blockquote footer{font:normal .8125rem 'DM Sans',sans-serif;color:var(--muted);margin-top:8px}
+.placard .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;border:1px solid #d9cdb9;font-size:.9375rem;font-weight:500;transition:background .2s,transform .2s var(--ease)}
+.btn:hover{background:#fff;transform:translateY(-1px)}
+.btn.primary{background:var(--ink);color:#fbf7f0;border-color:var(--ink)}
+.btn.primary:hover{background:#45433d}
+.placard .nav{margin-top:auto;padding-top:28px;display:flex;justify-content:space-between;font-size:.875rem}
+.placard .nav button{color:var(--muted)}.placard .nav button:hover{color:var(--ink)}
+.placard .nav kbd{font:inherit;font-size:.75rem;border:1px solid #d9cdb9;border-radius:4px;padding:0 5px;margin:0 2px}
+
+/* Below the cabinet */
+.after{width:min(1120px,92vw);margin:40px auto 0;display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(30px,5vw,80px);padding-bottom:40px}
+.after h2{font-size:clamp(1.9rem,3vw,2.6rem);line-height:1.1;font-weight:560;margin:10px 0 16px}
+.after p{color:#4b473f;max-width:56ch}
+.after p+p{margin-top:12px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tools span{background:#fbf7f0;border:1px solid #e3d9c8;border-radius:999px;padding:6px 14px;font-size:.875rem;display:inline-flex;gap:8px;align-items:center}
+.tools img{width:16px;height:16px;border-radius:4px}
+.tools-group+.tools-group{margin-top:22px}
+.visitors{margin-top:28px;padding:22px 24px;border-radius:12px;background:#fbf7f0;border:1px solid #e3d9c8;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.visitors b{font:560 1.25rem Fraunces,serif}
+.visitors div{display:flex;gap:10px}
+.page-foot{width:min(1120px,92vw);margin:0 auto;padding:28px 0 36px;border-top:1px solid #dccdb7;display:flex;justify-content:space-between;font-size:.875rem;color:var(--muted)}
+
+@media (max-width:860px){
+  header.site nav{gap:14px;font-size:.875rem}
+  .scene{grid-template-columns:1fr;width:calc(100vw - 32px)}
+  .intro{text-align:left;margin-bottom:0}
+  .scene{margin-top:170px}
+  .curator{position:absolute;right:18px;bottom:calc(100% - 4px);width:58px;z-index:3}
+  .curator img{margin-bottom:0}.curator::after{display:none}
+  .bubble{right:calc(100% + 6px);top:18px;font-size:.8125rem;max-width:190px;padding:8px 12px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .cabinet{padding:0 10px 10px}
+  .plaque{font-size:.625rem;padding:2px 7px;bottom:6px}.plaque span{display:none}
+  .placard{width:100%;top:auto;max-height:86dvh;border-radius:18px 18px 0 0;transform:translateY(105%);padding:22px}
+  .placard .sheet-art{display:block;aspect-ratio:3/2;border-radius:8px;background-size:cover;background-position:center;margin-bottom:18px}
+  .zoomed .dim{background:#2b2a2655}
+  .zoomed .niche:not(.current){filter:none}
+  .placard dl div{grid-template-columns:1fr;gap:2px}
+  .after{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+<header class="site">
+  <a class="wordmark serif" href="#">oakkar</a>
+  <nav aria-label="Elsewhere"><a href="/writing">Notes</a><a href="https://www.linkedin.com/in/oakkarphyo/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="https://github.com/okhay-p" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav>
+</header>
+
+<main>
+  <div class="stage">
+    <div class="intro">
+      <h1 class="serif">A small museum of things I built.</h1>
+      <p>Hi, I’m Oakkar — first-year CS at SMU. Pick anything off the shelf.</p>
+    </div>
+    <div class="scene" id="scene">
+      <div class="cabinet">
+        <div class="crown" aria-hidden="true">THE COLLECTION</div>
+        <div class="grid" id="grid"></div>
+        <div class="plinth" aria-hidden="true"></div>
+      </div>
+      <div class="curator" aria-hidden="true">
+        <div class="bubble" id="bubble">Welcome in. Have a look around.</div>
+        <img src="/images/oakkar-cutout.webp" alt="" width="480" height="1364">
+      </div>
+    </div>
+    <div class="floor" aria-hidden="true"></div>
+  </div>
+
+  <section class="after" aria-labelledby="note-title">
+    <div>
+      <p class="eyebrow">Curator’s note</p>
+      <h2 id="note-title" class="serif">Everything here started as a small problem.</h2>
+      <p>I’m a first-year Computer Science student at Singapore Management University. I learn by making small, useful tools — mostly because I can.</p>
+      <p>Off the shelf, I play football. I also used to make 3D models and animations, which is probably why I wanted my portfolio to look like a display case.</p>
+      <div class="visitors"><b>Visitor’s book</b><div><a class="btn" href="https://www.linkedin.com/in/oakkarphyo/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a class="btn" href="https://github.com/okhay-p" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div></div>
+    </div>
+    <div>
+      <p class="eyebrow">Tools of the trade</p>
+      <div class="tools-group"><div class="tools"><span>TypeScript</span><span>React</span><span>Astro</span><span>Go</span><span>Python</span></div></div>
+      <div class="tools-group"><p class="eyebrow" style="margin-top:6px">AI-assisted</p><div class="tools"><span><img src="/images/logos/hermes.svg" alt="">Hermes</span><span><img src="/images/logos/opencode.svg" alt="">OpenCode</span><span><img src="/images/logos/codex.png" alt="">Codex</span></div></div>
+    </div>
+  </section>
+  <footer class="page-foot"><span>© 2026 Oakkar</span><span>Please do touch the exhibits.</span></footer>
+</main>
+
+<div class="dim" id="dim"></div>
+<aside class="placard" id="placard" role="dialog" aria-modal="true" aria-labelledby="placard-title" tabindex="-1"></aside>
+
+<script>
+const exhibits = [
+  { id: 'playkit', title: 'PlayKit', status: 'Live', art: '/images/poker-helper-v1.webp', bg: '#e7e1f4',
+    say: 'This one started because nobody had chips.',
+    facts: [['Medium', 'TypeScript · WebRTC data channels · Cloudflare Workers & Durable Objects'], ['Built to learn', 'WebRTC — with one host browser in charge of the game'], ['Contains', 'Poker chips, chess clock, scorekeeper, tournaments, Undercover, Imposter']],
+    quote: 'My friends and I had cards, but no chips or cash.',
+    links: [['Try PlayKit ↗', 'https://playkit.oakkarphyo.com', true], ['What I learned', '/writing/playkit-webrtc'], ['Code ↗', 'https://github.com/okhay-p/playkit']] },
+  { id: 'server', title: 'Home server', status: 'Personal setup', art: '/images/home-server-v1.webp', bg: '#dde7d2',
+    say: 'My old laptop works the night shift now.',
+    facts: [['Medium', 'One old laptop · Hermes · Codex · OpenCode · T3 · Tailscale'], ['Purpose', 'Long agent tasks keep running while my everyday laptop is off'], ['Access', 'Tailscale from anywhere; Hermes over Discord and Telegram']],
+    quote: 'An old laptop now runs long agent tasks so my everyday laptop doesn’t have to.', links: [] },
+  { id: 'akasha', title: 'AkashaLearn', status: 'Archived', archived: true, art: '/images/akashalearn-v1.webp', bg: '#e7e1f4',
+    say: 'Retired. But it taught me Go.',
+    facts: [['Medium', 'Go API · React client · LLM integration'], ['Built to learn', 'Go, and experimenting with LLMs in a real app'], ['Condition', 'No longer maintained; the app is offline, the code is public']],
+    quote: 'I built an AI lesson app to learn Go and experiment with LLM integration.',
+    links: [['API code ↗', 'https://github.com/okhay-p/akasha-api', true], ['Client code ↗', 'https://github.com/okhay-p/akasha-client']] },
+  { id: 'polygons', title: 'A past life in polygons', status: 'Before code', art: '/images/instagram-creative-card-v1.webp', bg: '#f3e0cd',
+    say: 'Before code, I made little 3D worlds.',
+    facts: [['Medium', '3D models and animation'], ['On view', 'A miniature gallery inspired by my old renders'], ['Archive', '@noooidea.creative on Instagram']],
+    quote: 'I used to make 3D models and animations — some of that past life lives on Instagram.',
+    links: [['See the renders ↗', 'https://www.instagram.com/noooidea.creative/', true]] },
+  { id: 'note', title: 'Game night taught me WebRTC.', plaque: 'Learning note', status: 'Learning note', type: 'note',
+    say: 'I write down what I learn.',
+    facts: [['Medium', 'Writing and diagrams'], ['Covers', 'Signaling, offers and answers, ICE/STUN/TURN, host authority'], ['Honest limit', 'PlayKit uses STUN without TURN, so some networks can’t connect yet']],
+    quote: 'Connecting our phones became a way to learn how browsers find each other.',
+    links: [['Read the note', '/writing/playkit-webrtc', true], ['All notes', '/writing']] },
+  { id: 'next', title: 'Reserved', status: 'Empty on purpose', type: 'empty', soon: true,
+    say: 'Next project goes here. Probably.',
+    facts: [['Medium', 'To be decided'], ['Status', 'Currently learning & building']],
+    quote: 'This shelf is empty on purpose.',
+    links: [['Follow on GitHub ↗', 'https://github.com/okhay-p', true], ['LinkedIn ↗', 'https://www.linkedin.com/in/oakkarphyo/']] },
+];
+
+const grid = document.getElementById('grid');
+const scene = document.getElementById('scene');
+const placard = document.getElementById('placard');
+const bubble = document.getElementById('bubble');
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+const no = i => `No. ${String(i + 1).padStart(2, '0')}`;
+
+const niches = exhibits.map((x, i) => {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'niche' + (x.archived ? ' archived' : '') + (x.type === 'note' ? ' note-exhibit' : '') + (x.type === 'empty' ? ' empty-exhibit' : '');
+  b.setAttribute('aria-label', `${no(i)}: ${x.title}, ${x.status}`);
+  if (x.bg) b.style.background = x.bg;
+  const inner = x.type === 'note' ? `<span class="paper"><span class="pin"></span><b>${esc(x.title)}</b><i></i><i></i><i></i></span>`
+    : x.type === 'empty' ? `<span class="ring"></span><span class="q">?</span>`
+    : `<span class="art" style="background-image:url('${x.art}')"></span>`;
+  b.innerHTML = `${inner}<span class="plaque"><span>${no(i)}</span>${esc(x.plaque || x.title)}</span>`;
+  b.addEventListener('mouseenter', () => say(x.say));
+  b.addEventListener('focus', () => say(x.say));
+  b.addEventListener('click', () => open(i));
+  grid.appendChild(b);
+  return b;
+});
+grid.addEventListener('mouseleave', () => current < 0 && say('Welcome in. Have a look around.'));
+
+let sayTimer;
+function say(text) {
+  if (bubble.textContent === text) return;
+  clearTimeout(sayTimer); bubble.classList.add('swap');
+  sayTimer = setTimeout(() => { bubble.textContent = text; bubble.classList.remove('swap'); }, reduced ? 0 : 160);
+}
+
+// Camera: scale the scene so the chosen niche fills the space left of the placard.
+let current = -1, base = null, opener = null;
+const narrow = () => innerWidth <= 860;
+function frame(i) {
+  if (narrow()) { scene.style.transform = ''; return; }
+  const n = niches[i];
+  const sw = innerWidth - parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--panel'));
+  const nx = n.offsetLeft + n.offsetParent.offsetLeft, ny = n.offsetTop + n.offsetParent.offsetTop;
+  const k = Math.min((sw * .78) / n.offsetWidth, (innerHeight * .72) / n.offsetHeight);
+  const tx = sw / 2 - (base.left + (nx + n.offsetWidth / 2) * k);
+  const ty = innerHeight / 2 - (base.top + (ny + n.offsetHeight / 2) * k);
+  scene.style.transform = `translate(${tx}px, ${ty}px) scale(${k})`;
+}
+function render(i) {
+  const x = exhibits[i];
+  placard.innerHTML = `
+    <div class="bar"><span class="no">${no(i)} / ${String(exhibits.length).padStart(2, '0')}</span><button type="button" data-close>Close <span aria-hidden="true">✕</span></button></div>
+    ${x.art ? `<div class="sheet-art" style="background-image:url('${x.art}')"></div>` : ''}
+    <span class="status ${x.archived ? 'archived' : ''} ${x.soon ? 'soon' : ''}"><i></i>${esc(x.status)}</span>
+    <h2 id="placard-title" class="serif">${esc(x.title)}</h2>
+    <dl>${x.facts.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
+    <blockquote>“${esc(x.quote)}”<footer>— the maker</footer></blockquote>
+    ${x.links.length ? `<div class="actions">${x.links.map(([l, h, p]) => `<a class="btn ${p ? 'primary' : ''}" href="${h}" ${h.startsWith('http') ? 'target="_blank" rel="noopener noreferrer"' : ''}>${esc(l)}</a>`).join('')}</div>` : ''}
+    <div class="nav"><button type="button" data-step="-1">← Previous</button><span><kbd>←</kbd><kbd>→</kbd> <kbd>Esc</kbd></span><button type="button" data-step="1">Next →</button></div>`;
+  placard.querySelector('[data-close]').addEventListener('click', close);
+  placard.querySelectorAll('[data-step]').forEach(b => b.addEventListener('click', () => step(+b.dataset.step)));
+}
+function open(i) {
+  if (current < 0) {
+    opener = niches[i];
+    const r = scene.getBoundingClientRect(); base = { left: r.left, top: r.top };
+  }
+  niches.forEach((n, j) => n.classList.toggle('current', j === i));
+  current = i; render(i); say(exhibits[i].say);
+  document.body.classList.add('zoomed'); frame(i);
+  placard.focus({ preventScroll: true });
+}
+function step(d) { open((current + d + exhibits.length) % exhibits.length); }
+function close() {
+  if (current < 0) return;
+  document.body.classList.remove('zoomed'); scene.style.transform = '';
+  niches.forEach(n => n.classList.remove('current'));
+  (niches[current] || opener)?.focus({ preventScroll: true }); current = -1;
+}
+document.getElementById('dim').addEventListener('click', close);
+addEventListener('keydown', e => {
+  if (current < 0) return;
+  if (e.key === 'Escape') close();
+  else if (e.key === 'ArrowRight') step(1);
+  else if (e.key === 'ArrowLeft') step(-1);
+  else if (e.key === 'Tab') { // keep focus inside the placard while it is open
+    const f = [...placard.querySelectorAll('a,button')]; if (!f.length) return;
+    if (e.shiftKey && document.activeElement === f[0]) { f.at(-1).focus(); e.preventDefault(); }
+    else if (!e.shiftKey && document.activeElement === f.at(-1)) { f[0].focus(); e.preventDefault(); }
+  }
+});
+addEventListener('resize', () => { if (current >= 0) { scene.style.transition = 'none'; scene.style.transform = ''; const r = scene.getBoundingClientRect(); base = { left: r.left, top: r.top }; frame(current); void scene.offsetWidth; scene.style.transition = ''; } });
+</script>
+</body>
+</html>

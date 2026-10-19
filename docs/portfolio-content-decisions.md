@@ -35,3 +35,9 @@ Removed the SSH manager from the portfolio because built-in SSH configuration al
 The user selected the case-study prototype and requested migration to Astro SSG. This supersedes the original decision to omit separate project pages. Preserve the selected homepage layout, link PlayKit to a dedicated writeup, and add a learning-notes index for future projects.
 
 PlayKit’s article explains the learning goal, host-authoritative WebRTC data channels, signaling flow, ICE/STUN/TURN, current network limits, and proposed experiments. Its current deployment uses STUN without TURN; the diagram must identify the relay as an optional extension. New articles live in the validated Markdown/MDX collection and use the shared case-study layout.
+
+## Cabinet redesign — 20 October 2026
+
+The user reviewed three homepage prototypes (Sharpened, Game Night, The Cabinet) and selected The Cabinet. This supersedes the sidebar-and-collection layout. Projects, the WebRTC learning note, and the Instagram card become six exhibits in a display cabinet, with the transparent character cutout as curator. The sixth niche is deliberately empty and reserved for the next project. Statuses, descriptions, and links are unchanged in substance: PlayKit Live, Home server Personal setup with no source link, AkashaLearn Archived with its API and client code. The separate public-repository list and its QR code generator entry are removed; every featured repository is linked from its exhibit, and the GitHub profile remains linked. Outside technology stays to one short mention plus the single Instagram exhibit.
+
+The user asked for the character's remaining white backdrop to be removed, particularly around the shoes. The cutout is now derived by `scripts/make-character-cutout.mjs`, which also removes warm floor reflections behind the heels and backdrop showing between curls.

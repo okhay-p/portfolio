@@ -1,80 +1,85 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import ProjectCard from '../components/ProjectCard.astro';
+import Niche from '../components/Niche.astro';
+import Placard from '../components/Placard.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import { projects } from '../data/projects.js';
-import { repositories } from '../github-repositories.js';
+import { exhibits } from '../data/exhibits.js';
+import '../cabinet.css';
 const skills = ['TypeScript', 'React', 'Astro', 'Go', 'Python'];
 const agents = [
   { name: 'Hermes', logo: 'hermes.svg' },
   { name: 'OpenCode', logo: 'opencode.svg' },
   { name: 'Codex', logo: 'codex.png' },
 ];
+const number = (index: number) => `No. ${String(index + 1).padStart(2, '0')}`;
 ---
-<BaseLayout title="Oakkar Phyo — Student & curious builder" description="Oakkar Phyo, a first-year Computer Science student at Singapore Management University. Small tools, personal projects, and learning by building.">
-  <div class="c-layout">
-    <aside class="c-sidebar">
+<BaseLayout title="Oakkar Phyo — Student & curious builder" description="Oakkar Phyo, a first-year Computer Science student at Singapore Management University. A small museum of tools, personal projects, and learning by building.">
+  <script is:inline>document.documentElement.classList.add('js')</script>
+  <div class="museum">
+    <header class="museum-header">
       <a class="wordmark" href="/">oakkar</a>
-      <div>
-        <span class="eyebrow">DEVELOPER. BUILDER.<br />OCCASIONAL DAYDREAMER.</span>
-        <h1>Learning by<br />building.</h1>
-        <p>First-year Computer Science student at Singapore Management University.</p>
-        <span class="status"><i></i> Currently learning &amp; building</span>
-      </div>
-      <nav class="c-sidebar-bottom" aria-label="Portfolio">
-        <a href="#about">A bit about me</a>
-        <a href="#skills">My toolkit</a>
-        <a href="/writing">Learning notes</a>
-        <div class="c-sidebar-socials">
-          <a href="https://www.linkedin.com/in/oakkarphyo/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
-          <a href="https://github.com/okhay-p" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+      <nav aria-label="Site"><a href="/writing">Learning notes</a><a href="https://www.linkedin.com/in/oakkarphyo/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="https://github.com/okhay-p" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav>
+    </header>
+    <main id="main-content">
+      <section class="stage" id="work" aria-labelledby="museum-title">
+        <div class="intro">
+          <p class="intro-eyebrow">Learning by building</p>
+          <h1 id="museum-title">A small museum of things I built.</h1>
+          <p>Hi, I’m Oakkar, a first-year Computer Science student at SMU. Pick anything off the shelf.</p>
         </div>
-        <span>LEARNING / BUILDING / EXPLORING</span>
-      </nav>
-    </aside>
-    <main class="c-content" id="main-content">
-      <div class="c-heading"><span>THE COLLECTION</span><span>SMALL TOOLS &amp; SIDE QUESTS</span></div>
-      <div class="collection" id="work">
-        <div class="collection-card card-large">
-          <div class="collection-art blue">
-            <div class="scene portrait"><img src="/images/oakkar-character-v2.png" alt="Full-length stylized character of Oakkar with curly hair, silver glasses, a black hoodie, and black sneakers" width="1122" height="1402" fetchpriority="high" /></div>
-            <span class="collection-sticker">A LITTLE HUMAN TOUCH</span>
+        <div class="scene" data-scene>
+          <div class="cabinet">
+            <div class="crown" aria-hidden="true">The collection</div>
+            <div class="shelves" data-shelves>
+              {exhibits.map((exhibit, index) => <Niche exhibit={exhibit} number={number(index)} eager={index < 3} />)}
+            </div>
+            <div class="plinth" aria-hidden="true"></div>
           </div>
-          <div class="collection-meta"><div><h2>Hello, I’m Oakkar.</h2><p>Learning things. Making things. Mostly because I can.</p></div></div>
+          <div class="curator" aria-hidden="true">
+            <p class="bubble" data-bubble>Welcome in. Have a look around.</p>
+            <img src="/images/oakkar-cutout.webp" alt="" width="490" height="1364" fetchpriority="high" />
+          </div>
         </div>
-        {projects.map(project => <ProjectCard project={project} />)}
-      </div>
-      <section class="skills-section" id="skills">
-        <div class="eyebrow">HOW I BUILD</div>
-        <div class="skills-intro"><h2>A curious mind.<br />A practical toolkit.</h2><p>Code, craft, and AI-assisted development.</p></div>
-        <div class="skills-groups">
-          <div><h3>Development</h3><div class="skill-tags">{skills.map(name => <span>{name}</span>)}</div></div>
-          <div><h3>AI-assisted development</h3><div class="skill-tags agent-tags">{agents.map(({ name, logo }) => (
-            <span><img class:list={['agent-logo', `${name.toLowerCase()}-logo`]} src={`/images/logos/${logo}`} alt="" aria-hidden="true" width="24" height="24" />{name}</span>
-          ))}</div></div>
+        <div class="floor" aria-hidden="true"></div>
+      </section>
+
+      <section class="catalogue" id="catalogue" aria-labelledby="catalogue-title" data-catalogue>
+        <div class="catalogue-bar">
+          <h2 id="catalogue-title">The catalogue</h2>
+          <span class="catalogue-count" data-count></span>
+          <button type="button" class="catalogue-close" data-close>Close <span aria-hidden="true">✕</span></button>
+        </div>
+        {exhibits.map((exhibit, index) => <Placard exhibit={exhibit} number={number(index)} />)}
+        <div class="catalogue-nav">
+          <button type="button" data-step="-1">← Previous</button>
+          <span aria-hidden="true"><kbd>←</kbd> <kbd>→</kbd> <kbd>Esc</kbd></span>
+          <button type="button" data-step="1">Next →</button>
         </div>
       </section>
-      <section class="repository-section" id="repositories">
-        <div class="section-heading"><h2>Public repositories <span>/ {repositories.length}</span></h2><a class="github-profile" href="https://github.com/okhay-p" target="_blank" rel="noopener noreferrer">More on GitHub ↗</a></div>
-        <div class="repo-list">{repositories.map(repo => (
-          <a href={repo.url} target="_blank" rel="noopener noreferrer"><span class="repo-name">{repo.name}</span><span class="repo-language">{repo.primaryLanguage?.name || 'Resources'}</span><span aria-hidden="true">↗</span></a>
-        ))}</div>
+
+      <section class="curator-note" id="about" aria-labelledby="note-title">
+        <div>
+          <p class="label">Curator’s note</p>
+          <h2 id="note-title">Everything here started as a small problem.</h2>
+          <p>I’m a first-year Computer Science student at Singapore Management University. I build small tools, learn things along the way, and occasionally make life a little easier. Mostly because I can.</p>
+          <p>Off the shelf, I play football. I also used to make 3D models and animations, which is probably why my portfolio ended up looking like a display case.</p>
+          <div class="visitors"><b>Visitor’s book</b><div><a href="https://www.linkedin.com/in/oakkarphyo/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="https://github.com/okhay-p" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div></div>
+        </div>
+        <div id="skills">
+          <p class="label">Tools of the trade</p>
+          <ul class="tools" aria-label="Development">{skills.map(name => <li>{name}</li>)}</ul>
+          <p class="label">AI-assisted development</p>
+          <ul class="tools" aria-label="AI-assisted development">{agents.map(({ name, logo }) => (
+            <li><img src={`/images/logos/${logo}`} alt="" width="16" height="16" />{name}</li>
+          ))}</ul>
+        </div>
       </section>
-      <section class="c-about" id="about">
-        <h2>A curious mind.<br />A hands-on approach.</h2>
-        <p>I’m Oakkar, a first-year Computer Science student at Singapore Management University. I build small tools, learn things along the way, and occasionally make life a little easier. Mostly because I can.</p>
-        <p>Outside of code, I play football. I also used to make 3D models and animations—some of that past life lives on Instagram.</p>
-        <a class="instagram-card" href="https://www.instagram.com/noooidea.creative/" target="_blank" rel="noopener noreferrer" aria-label="See my past 3D models and animations on Instagram">
-          <img src="/images/instagram-creative-card-v1.png" alt="A miniature gallery inspired by my 3D renders: a riverside shop, snowman, moon-and-stars switch, and framed abstract print" width="1536" height="1024" loading="lazy" />
-          <div class="instagram-card-caption"><div><h3>A past life in polygons.</h3><span>@noooidea.creative · 3D &amp; animation</span></div><span aria-hidden="true">↗</span></div>
-        </a>
-        <div class="about-socials"><a class="github-profile" href="https://www.linkedin.com/in/oakkarphyo/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a class="github-profile" href="https://github.com/okhay-p" target="_blank" rel="noopener noreferrer">More on GitHub ↗</a></div>
-      </section>
-      <SiteFooter />
     </main>
+    <div class="museum-footer"><SiteFooter /></div>
+    <div class="dim" data-dim></div>
   </div>
   <script>
-    import { initializeMotion } from '../motion.js';
-    initializeMotion(document.querySelector('.c-layout'));
+    import { initializeCabinet } from '../cabinet.js';
+    initializeCabinet(document.querySelector('.museum'));
   </script>
 </BaseLayout>

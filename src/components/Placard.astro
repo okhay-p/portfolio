@@ -1,0 +1,32 @@
+---
+interface Props {
+  exhibit: {
+    id: string; title: string; status: string; tone: string; image?: string;
+    details: string[][]; quote: string;
+    links: { label: string; href: string; primary?: boolean }[];
+  };
+  number: string;
+}
+const { exhibit, number } = Astro.props;
+const { id, title, status, tone, image, details, quote, links } = exhibit;
+---
+<article class="placard" id={`exhibit-${id}`} aria-labelledby={`exhibit-${id}-title`}>
+  <p class="placard-number">{number}</p>
+  {image && <img class="placard-art" src={image} alt="" width="1200" height="800" loading="lazy" decoding="async" />}
+  <p class:list={['exhibit-status', tone]}><i></i>{status}</p>
+  <h3 id={`exhibit-${id}-title`}>{title}</h3>
+  <dl>{details.map(([term, description]) => <div><dt>{term}</dt><dd>{description}</dd></div>)}</dl>
+  <blockquote><p>“{quote}”</p><cite>— the maker</cite></blockquote>
+  {links.length > 0 && (
+    <div class="placard-actions">
+      {links.map(({ label, href, primary }) => {
+        const external = href.startsWith('http');
+        return (
+          <a class:list={['placard-link', { primary }]} href={href} {...(external && { target: '_blank', rel: 'noopener noreferrer' })}>
+            {label}{external && <span aria-hidden="true">↗</span>}
+          </a>
+        );
+      })}
+    </div>
+  )}
+</article>

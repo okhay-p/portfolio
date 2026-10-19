@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Prototype 01 · Sharpened — Oakkar</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+@font-face{font-family:Fraunces;src:url('/fonts/fraunces-variable.ttf');font-weight:100 900;font-display:swap}
+:root{
+  --paper:#f7f7f2;--ink:#27312f;--muted:#606b65;--line:#dfe4de;--soft:#eeeee7;
+  --blue:#d7e5ee;--lilac:#e7e1f4;--sage:#dde7d2;--clay:#b76744;--leaf:#7e9e6d;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 'DM Sans',sans-serif;font-synthesis:none}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0}
+h1,h2,h3,p{margin:0}
+a:focus-visible,button:focus-visible{outline:2px solid var(--clay);outline-offset:4px;border-radius:4px}
+::selection{background:#edc7ad}
+.serif{font-family:Fraunces,Georgia,serif;font-optical-sizing:auto;font-variation-settings:'SOFT' 100,'WONK' 1;letter-spacing:-.025em}
+.eyebrow{font-size:.75rem;letter-spacing:.12em;font-weight:600;text-transform:uppercase}
+
+/* Layout */
+.layout{display:grid;grid-template-columns:300px minmax(0,1fr);max-width:1720px;margin:auto}
+.sidebar{position:sticky;top:0;height:100dvh;min-height:640px;padding:36px 30px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:28px}
+.wordmark{font-weight:750;font-size:2.25rem;letter-spacing:-1.7px;line-height:1}
+.sidebar h1{font-size:2.6rem;line-height:1.08;font-weight:600;margin-top:auto}
+.sidebar .lede{color:var(--muted);max-width:240px}
+.status{display:flex;align-items:center;gap:10px;font-size:.875rem;color:var(--muted)}
+.status i{width:7px;height:7px;border-radius:50%;background:var(--leaf);box-shadow:0 0 0 4px #7e9e6d22;flex-shrink:0}
+.toc{display:flex;flex-direction:column;gap:2px;margin-top:auto}
+.toc a{display:grid;grid-template-columns:28px 1fr;align-items:center;padding:7px 0;color:var(--muted);transition:color .2s}
+.toc a span{font-size:.75rem;font-variant-numeric:tabular-nums;letter-spacing:.06em}
+.toc a b{font-weight:500;position:relative;width:max-content}
+.toc a b::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:1.5px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
+.toc a:hover,.toc a[aria-current="true"]{color:var(--ink)}
+.toc a[aria-current="true"] b::after{transform:scaleX(1)}
+.socials{display:flex;gap:18px;font-size:.875rem;padding-top:18px;border-top:1px solid var(--line)}
+.socials a{color:var(--muted)}.socials a:hover{color:var(--ink)}
+main{padding:40px 40px 0;min-width:0}
+section{scroll-margin-top:24px}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:96px 0 26px;padding-top:22px;border-top:1px solid var(--line)}
+.section-head h2{font-size:2.25rem;font-weight:550;line-height:1.1}
+.section-head h2 small{font-family:'DM Sans',sans-serif;font-size:.75rem;letter-spacing:.12em;font-weight:600;color:var(--muted);margin-right:14px;vertical-align:.7em}
+.section-head p{color:var(--muted);font-size:.875rem;text-align:right;max-width:32ch}
+
+/* Hero */
+.hero{position:relative;background:var(--blue);border-radius:14px;min-height:430px;margin-top:96px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);overflow:visible}
+.hero-copy{padding:48px 48px 42px;display:flex;flex-direction:column;justify-content:flex-end;gap:20px;position:relative;z-index:2}
+.hero-copy h2{font-size:clamp(2.4rem,4vw,3.6rem);line-height:1.04;font-weight:560}
+.hero-copy p{font-size:1.125rem;line-height:1.6;max-width:44ch;color:#34413e}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.facts span{background:#ffffffa8;border:1px solid #ffffff;border-radius:999px;padding:5px 13px;font-size:.875rem;backdrop-filter:blur(4px)}
+.hero-figure{position:relative}
+.hero-figure img{position:absolute;bottom:26px;left:50%;height:calc(100% + 70px);width:auto;max-height:540px;transform:translateX(-46%);filter:drop-shadow(0 18px 18px #27312f22);user-select:none;pointer-events:none}
+.hero-figure::after{content:'';position:absolute;left:50%;bottom:18px;width:230px;height:26px;transform:translateX(-46%);border-radius:50%;background:radial-gradient(closest-side,#27312f40,#27312f00)}
+.bubble{position:absolute;top:-30px;right:calc(50% + 110px);width:max-content;background:#fff;border-radius:18px 18px 4px 18px;padding:12px 18px;font-size:.9375rem;box-shadow:0 10px 30px -12px #27312f40;max-width:230px;z-index:3;transition:opacity .25s,transform .25s var(--ease)}
+.bubble.swap{opacity:0;transform:translateY(6px)}
+.bubble small{display:block;font-size:.6875rem;letter-spacing:.1em;color:var(--muted);font-weight:600;margin-bottom:2px}
+
+/* Featured project */
+.feature{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,1fr);border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--line)}
+.feature-art{background:var(--lilac);position:relative;min-height:340px}
+.feature-art img{width:100%;height:100%;object-fit:cover;display:block}
+.pill{position:absolute;top:16px;left:16px;display:inline-flex;align-items:center;gap:8px;background:#fffffff0;border-radius:999px;padding:5px 12px 5px 10px;font-size:.8125rem;font-weight:500}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--leaf)}
+.pill.live i{animation:pulse 2.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #7e9e6d88}70%{box-shadow:0 0 0 8px #7e9e6d00}100%{box-shadow:0 0 0 0 #7e9e6d00}}
+.pill.archived i{background:#a59a8c}
+.demo{padding:28px;display:flex;flex-direction:column;gap:14px;border-left:1px solid var(--line)}
+.demo header{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.demo header b{font-size:.9375rem}
+.demo header span{font-size:.8125rem;color:var(--muted)}
+.clock{display:grid;grid-template-rows:1fr 1fr;gap:8px;flex:1;min-height:220px}
+.clock button{border-radius:12px;background:var(--soft);display:flex;align-items:center;justify-content:space-between;padding:0 22px;transition:background .25s,color .25s,transform .15s}
+.clock button:active{transform:scale(.985)}
+.clock button[data-active="true"]{background:var(--ink);color:var(--paper)}
+.clock button[data-flag="true"]{background:var(--clay);color:#fff}
+.clock .who{font-size:.8125rem;opacity:.75}
+.time{font-family:Fraunces,Georgia,serif;font-variation-settings:'SOFT' 100;font-size:3rem;line-height:1;font-variant-numeric:tabular-nums;font-weight:500}
+.demo footer{display:flex;justify-content:space-between;align-items:center;font-size:.8125rem;color:var(--muted)}
+.demo footer button{text-decoration:underline;text-underline-offset:3px}
+.feature-body{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,1fr);border-top:1px solid var(--line)}
+.feature-body>div{padding:28px}
+.feature-body>div+div{border-left:1px solid var(--line)}
+.title-row{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.title-row h3{font-size:2rem;font-weight:560}
+.title-row span{color:var(--muted);font-size:.875rem}
+.desc{color:#3d4945;max-width:62ch}
+.tools{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px;padding:0;list-style:none}
+.tools li{display:flex;align-items:center;gap:7px;padding:6px 12px;border-radius:8px;background:var(--soft);font-size:.875rem}
+.tools svg{width:16px;height:16px;flex-shrink:0}
+.learned{display:flex;flex-direction:column;gap:12px;height:100%}
+.learned .eyebrow{color:var(--muted)}
+.learned p{font-size:1.0625rem}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto;padding-top:8px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:9px;font-size:.9375rem;font-weight:500;border:1px solid var(--line);transition:background .2s,border-color .2s,transform .2s var(--ease)}
+.btn:hover{border-color:#bfc8c0;transform:translateY(-1px)}
+.btn.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.btn.primary:hover{background:#3a4744}
+.arrow{transition:transform .25s var(--ease)}
+.btn:hover .arrow,.note:hover .arrow{transform:translate(2px,-2px)}
+.btn:hover .arrow.right{transform:translateX(3px)}
+
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:24px}
+.card{border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--line);display:flex;flex-direction:column}
+.card-art{position:relative;aspect-ratio:3/1.75;overflow:hidden}
+.card-art img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s var(--ease)}
+.card:hover .card-art img{transform:scale(1.03)}
+.card-body{padding:24px 26px 26px;display:flex;flex-direction:column;gap:14px;flex:1}
+.card-body .title-row{margin:0}
+.card-body .title-row h3{font-size:1.625rem}
+.why{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:.9375rem;padding-top:14px;border-top:1px dashed var(--line)}
+.why dt{color:var(--muted);font-size:.8125rem;padding-top:2px}
+.why dd{margin:0}
+.wire{display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:.8125rem;margin-top:2px}
+.wire span{padding:4px 10px;border-radius:6px;background:var(--sage)}
+.wire span.hub{background:var(--ink);color:var(--paper)}
+.wire i{font-style:normal;color:var(--muted)}
+.card .actions{padding-top:4px}
+
+/* Notes */
+.note{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.8fr);gap:0;border-radius:14px;background:#fff;border:1px solid var(--line);overflow:hidden;transition:border-color .2s}
+.note:hover{border-color:#bfc8c0}
+.note-copy{padding:32px;display:flex;flex-direction:column;gap:14px}
+.note-copy .eyebrow{color:var(--muted)}
+.note-copy h3{font-size:2.25rem;line-height:1.1;font-weight:560}
+.note-copy p{color:#3d4945;max-width:56ch}
+.tags{display:flex;gap:8px;flex-wrap:wrap}
+.tags span{font-size:.8125rem;background:var(--soft);padding:3px 10px;border-radius:5px;color:var(--muted)}
+.note-copy .more{margin-top:auto;font-weight:500;display:flex;gap:8px;align-items:center}
+.note-art{background:#edf1f5;display:grid;place-items:center;padding:24px}
+.note-art svg{width:100%;max-width:360px;height:auto}
+.note-art text{font:500 12px 'DM Sans',sans-serif;fill:var(--ink)}
+.note-art .sub{font-size:10px;fill:var(--muted);font-weight:400}
+.packet{offset-path:path('M118 136 H242');animation:travel 2.6s var(--ease) infinite}
+.packet.back{offset-path:path('M242 136 H118');animation-delay:1.3s}
+@keyframes travel{0%{offset-distance:0%;opacity:0}15%{opacity:1}85%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.upcoming{margin-top:14px;padding:18px 22px;border:1.5px dashed #cdd4cc;border-radius:12px;color:var(--muted);font-size:.9375rem;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* Toolkit */
+.kit{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.kit h3{font-size:.8125rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
+.kit ul{list-style:none;margin:0;padding:0}
+.kit li{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.kit li b{font-weight:600;display:flex;align-items:center;gap:9px}
+.kit li b img{width:20px;height:20px;border-radius:5px}
+.kit li span{color:var(--muted);font-size:.9375rem}
+.kit li a{color:var(--ink);text-decoration:underline;text-decoration-color:#c3cbc4;text-underline-offset:3px}
+.kit li a:hover{text-decoration-color:var(--ink)}
+
+/* About */
+.about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:start}
+.about-copy{display:flex;flex-direction:column;gap:18px;font-size:1.125rem;max-width:52ch}
+.about-copy p{color:#3d4945}
+.say-hi{margin-top:12px;padding:24px;border-radius:14px;background:var(--sage)}
+.say-hi h3{font-size:1.5rem;font-weight:560;margin-bottom:6px}
+.say-hi p{font-size:.9375rem;margin-bottom:16px}
+.say-hi .btn{background:#fff;border-color:#fff}
+.insta{display:block;border-radius:14px;overflow:hidden;background:#fff;border:1px solid var(--line)}
+.insta img{width:100%;display:block;aspect-ratio:3/2;object-fit:cover}
+.insta div{display:flex;justify-content:space-between;align-items:center;padding:18px 22px}
+.insta h3{font-size:1.375rem;font-weight:560}
+.insta span{font-size:.875rem;color:var(--muted)}
+body>.layout>main>footer{display:flex;justify-content:space-between;padding:56px 0 36px;margin-top:96px;border-top:1px solid var(--line);font-size:.875rem;color:var(--muted)}
+
+/* Reveal: content is visible by default; JS opts in. */
+.js .reveal{opacity:0;transform:translateY(16px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
+.js .reveal.in{opacity:1;transform:none}
+
+@media (max-width:1180px){
+  .feature,.feature-body{grid-template-columns:1fr}
+  .demo{border-left:0;border-top:1px solid var(--line)}
+  .feature-body>div+div{border-left:0;border-top:1px solid var(--line)}
+  .note{grid-template-columns:1fr}
+}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{position:sticky;top:0;z-index:10;height:auto;min-height:0;flex-direction:row;align-items:center;justify-content:space-between;padding:14px 20px;background:#f7f7f2ee;backdrop-filter:blur(10px);border-right:0;border-bottom:1px solid var(--line)}
+  .wordmark{font-size:1.75rem}
+  .sidebar h1,.sidebar .lede,.sidebar .status,.socials{display:none}
+  .toc{flex-direction:row;margin:0;gap:16px;overflow-x:auto}
+  .toc a{display:block;padding:4px 0}.toc a span{display:none}
+  main{padding:20px 20px 0}
+  .hero{grid-template-columns:1fr;margin-top:110px;min-height:0}
+  .hero-copy{padding:28px 24px 30px;order:2}
+  .hero-figure{height:300px;order:1}
+  .hero-figure img{height:370px;bottom:14px;transform:translateX(-30%)}.hero-figure::after{bottom:8px;transform:translateX(-30%)}
+  .bubble{top:-50px;right:auto;left:0;max-width:170px;font-size:.875rem}
+  .pair,.kit,.about{grid-template-columns:1fr}
+  .section-head{margin-top:72px;flex-direction:column;align-items:flex-start}
+  .section-head p{text-align:left}
+  .kit li{grid-template-columns:1fr;gap:2px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <a class="wordmark serif" href="#top">oakkar</a>
+    <h1 class="serif">Learning by building.</h1>
+    <p class="lede">First-year Computer Science student at Singapore Management University.</p>
+    <span class="status"><i></i>Currently learning &amp; building</span>
+    <nav class="toc" aria-label="Sections">
+      <a href="#work"><span>01</span><b>Work</b></a>
+      <a href="#notes"><span>02</span><b>Notes</b></a>
+      <a href="#toolkit"><span>03</span><b>Toolkit</b></a>
+      <a href="#about"><span>04</span><b>About</b></a>
+    </nav>
+    <div class="socials">
+      <a href="https://www.linkedin.com/in/oakkarphyo/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+      <a href="https://github.com/okhay-p" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+    </div>
+  </aside>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hello">
+      <div class="hero-copy">
+        <h2 id="hello" class="serif">Hi, I’m Oakkar.</h2>
+        <p>My friends had cards but no chips, so I built them an app. My laptop needed sleep, so an old one took the night shift. Small tools for real problems — mostly because I can.</p>
+        <div class="facts"><span>CS @ SMU · Year 1</span><span>Plays football</span><span>Ex-3D hobbyist</span></div>
+      </div>
+      <div class="hero-figure" aria-hidden="true">
+        <div class="bubble" id="bubble"><small>RIGHT NOW</small><span>Currently learning &amp; building.</span></div>
+        <img src="/images/oakkar-cutout.webp" alt="" width="480" height="1364">
+      </div>
+    </section>
+
+    <section id="work" aria-labelledby="work-title">
+      <div class="section-head"><h2 id="work-title" class="serif"><small>01</small>Things I’ve built</h2><p>Each one started as a small problem — and turned into something I wanted to learn.</p></div>
+
+      <article class="feature reveal" aria-labelledby="playkit-title">
+        <a class="feature-art" href="https://playkit.oakkarphyo.com" target="_blank" rel="noopener noreferrer" aria-label="Open PlayKit">
+          <img src="/images/poker-helper-v1.webp" alt="Clay-style poker chips and playing cards on a lilac backdrop" width="1200" height="800">
+          <span class="pill live"><i></i>Live</span>
+        </a>
+        <div class="demo">
+          <header><b>A tiny piece of PlayKit</b><span>Tap your side to end your turn</span></header>
+          <div class="clock" id="clock">
+            <button type="button" data-side="0" aria-label="Player one clock"><span class="time">3:00</span><span class="who">Player 1</span></button>
+            <button type="button" data-side="1" aria-label="Player two clock"><span class="time">3:00</span><span class="who">Player 2</span></button>
+          </div>
+          <footer><span id="clock-status">Either player starts the clock.</span><button type="button" id="clock-reset">Reset</button></footer>
+        </div>
+        <div class="feature-body">
+          <div>
+            <div class="title-row"><h3 id="playkit-title" class="serif">PlayKit</h3><span>A toolkit for game nights</span></div>
+            <p class="desc">We had cards, but no chips or cash. PlayKit started as poker chip tracking and grew into six tools. Play on one shared device, or let friends join supported games from their own phones.</p>
+            <ul class="tools" aria-label="Tools in PlayKit">
+              <li><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="2 1.6"/></svg>Poker chips</li>
+              <li><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="9" r="5.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 9V6.2M6.5 1.8h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Chess clock</li>
+              <li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13V8M8 13V3M13 13V6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>Scorekeeper</li>
+              <li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 3h3v3H2zM2 10h3v3H2zM5 4.5h3v7H5M8 8h5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>Tournaments</li>
+              <li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 7c2-3 10-3 12 0M4 8.5a2 2 0 1 0 4 0M8 8.5a2 2 0 1 0 4 0" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Undercover</li>
+              <li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3h10v5a5 5 0 0 1-10 0z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 7h1M9.5 7h1M6 10.5c1.2.8 2.8.8 4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>Imposter</li>
+            </ul>
+          </div>
+          <div class="learned">
+            <span class="eyebrow">Built to learn</span>
+            <p>WebRTC. Phones connect to a host browser over data channels, and the host stays in charge of the game.</p>
+            <div class="actions">
+              <a class="btn primary" href="https://playkit.oakkarphyo.com" target="_blank" rel="noopener noreferrer">Try PlayKit <span class="arrow">↗</span></a>
+              <a class="btn" href="/writing/playkit-webrtc">What I learned <span class="arrow right">→</span></a>
+              <a class="btn" href="https://github.com/okhay-p/playkit" target="_blank" rel="noopener noreferrer">Code <span class="arrow">↗</span></a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <div class="pair">
+        <article class="card reveal" aria-labelledby="server-title">
+          <div class="card-art" style="background:var(--sage)"><img src="/images/home-server-v1.webp" alt="A miniature laptop, server blocks, and router in soft sage and cream" width="1200" height="800" loading="lazy"><span class="pill"><i></i>Personal setup</span></div>
+          <div class="card-body">
+            <div class="title-row"><h3 id="server-title" class="serif">Home server</h3></div>
+            <p class="desc">An old laptop runs long agent tasks so my everyday laptop doesn’t have to. Hermes handles research and server setup; Codex and OpenCode take the long coding jobs.</p>
+            <dl class="why">
+              <dt>Why</dt><dd>Agent jobs keep running while my laptop is off.</dd>
+              <dt>Wiring</dt><dd><div class="wire" aria-label="Me connects through Tailscale to the old laptop, which runs Hermes, Codex, OpenCode, and T3"><span>Me, anywhere</span><i>→</i><span>Tailscale</span><i>→</i><span class="hub">Old laptop</span><i>→</i><span>Hermes · Codex · OpenCode · T3</span></div></dd>
+            </dl>
+          </div>
+        </article>
+        <article class="card reveal" aria-labelledby="akasha-title">
+          <div class="card-art" style="background:var(--lilac)"><img src="/images/akashalearn-v1.webp" alt="A stack of pastel books with open pages and a golden AI sparkle" width="1200" height="800" loading="lazy"><span class="pill archived"><i></i>Archived</span></div>
+          <div class="card-body">
+            <div class="title-row"><h3 id="akasha-title" class="serif">AkashaLearn</h3></div>
+            <p class="desc">An AI lesson app. It’s no longer maintained and the app is offline, but the code is still around.</p>
+            <dl class="why">
+              <dt>Built to learn</dt><dd>Go, and how to wire an LLM into a real app.</dd>
+              <dt>Stack</dt><dd>Go API · React client</dd>
+            </dl>
+            <div class="actions">
+              <a class="btn" href="https://github.com/okhay-p/akasha-api" target="_blank" rel="noopener noreferrer">API code <span class="arrow">↗</span></a>
+              <a class="btn" href="https://github.com/okhay-p/akasha-client" target="_blank" rel="noopener noreferrer">Client code <span class="arrow">↗</span></a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="notes" aria-labelledby="notes-title">
+      <div class="section-head"><h2 id="notes-title" class="serif"><small>02</small>Learning notes</h2><p>What stuck after building something.</p></div>
+      <a class="note reveal" href="/writing/playkit-webrtc">
+        <div class="note-copy">
+          <span class="eyebrow">PlayKit · Case study</span>
+          <h3 class="serif">Game night taught me WebRTC.</h3>
+          <p>How browsers find each other, agree on a connection, and keep a shared game in sync — plus why one browser owns the game, and what breaks without a TURN relay.</p>
+          <div class="tags"><span>WebRTC</span><span>Data channels</span><span>Cloudflare</span></div>
+          <span class="more">Read the note <span class="arrow right">→</span></span>
+        </div>
+        <div class="note-art" aria-hidden="true">
+          <svg viewBox="0 0 360 190">
+            <rect x="130" y="16" width="100" height="44" rx="10" fill="#fff" stroke="#c2ccd5" stroke-width="1.5"/>
+            <text x="180" y="36" text-anchor="middle">Signaling</text><text x="180" y="50" text-anchor="middle" class="sub">Worker + Durable Object</text>
+            <path d="M78 116 L150 60 M282 116 L210 60" stroke="#315f91" stroke-width="1.6" fill="none" stroke-dasharray="4 4"/>
+            <rect x="20" y="114" width="96" height="44" rx="10" fill="#27312f"/><text x="68" y="140" text-anchor="middle" style="fill:#f7f7f2">Host</text>
+            <rect x="244" y="114" width="96" height="44" rx="10" fill="#fff" stroke="#c2ccd5" stroke-width="1.5"/><text x="292" y="140" text-anchor="middle">Guest phone</text>
+            <path d="M116 136 H244" stroke="#527544" stroke-width="3"/>
+            <text x="180" y="178" text-anchor="middle" class="sub">data channel · host-authoritative</text>
+            <circle r="5" fill="#527544" class="packet"/><circle r="5" fill="#b76744" class="packet back"/>
+          </svg>
+        </div>
+      </a>
+      <div class="upcoming reveal"><span>The next note gets written when the next thing gets built.</span><a href="/writing" style="color:var(--ink);font-weight:500">All notes →</a></div>
+    </section>
+
+    <section id="toolkit" aria-labelledby="toolkit-title">
+      <div class="section-head"><h2 id="toolkit-title" class="serif"><small>03</small>Toolkit, with receipts</h2><p>Only what I’ve actually shipped something with.</p></div>
+      <div class="kit reveal">
+        <div>
+          <h3>Development</h3>
+          <ul>
+            <li><b>TypeScript</b><span><a href="https://github.com/okhay-p/playkit" target="_blank" rel="noopener noreferrer">PlayKit</a>, <a href="https://github.com/okhay-p/akasha-client" target="_blank" rel="noopener noreferrer">AkashaLearn client</a></span></li>
+            <li><b>Go</b><span><a href="https://github.com/okhay-p/akasha-api" target="_blank" rel="noopener noreferrer">AkashaLearn API</a></span></li>
+            <li><b>React</b><span>AkashaLearn client</span></li>
+            <li><b>Astro</b><span>This website</span></li>
+            <li><b>Python</b><span><a href="https://github.com/okhay-p/QR-code-generator" target="_blank" rel="noopener noreferrer">QR code generator</a> with Flask</span></li>
+          </ul>
+        </div>
+        <div>
+          <h3>AI-assisted development</h3>
+          <ul>
+            <li><b><img src="/images/logos/hermes.svg" alt="">Hermes</b><span>Research and server setup, from Discord or Telegram</span></li>
+            <li><b><img src="/images/logos/codex.png" alt="">Codex</b><span>Long coding tasks on the home server</span></li>
+            <li><b><img src="/images/logos/opencode.svg" alt="">OpenCode</b><span>Long coding tasks on the home server</span></li>
+            <li><b>T3</b><span>Keeping track of all those agents</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" aria-labelledby="about-title">
+      <div class="section-head"><h2 id="about-title" class="serif"><small>04</small>Away from the keyboard</h2><p></p></div>
+      <div class="about">
+        <div class="about-copy reveal">
+          <p>I play football. I also used to make 3D models and animations — the soft, clay-ish look of this site comes from that past life.</p>
+          <p>Mostly, I like learning things by making something slightly useful with them.</p>
+          <div class="say-hi">
+            <h3 class="serif">Say hi.</h3>
+            <p>I’m always happy to talk about something I built, or something you’re building.</p>
+            <div class="actions"><a class="btn" href="https://www.linkedin.com/in/oakkarphyo/" target="_blank" rel="noopener noreferrer">LinkedIn <span class="arrow">↗</span></a><a class="btn" href="https://github.com/okhay-p" target="_blank" rel="noopener noreferrer">GitHub <span class="arrow">↗</span></a></div>
+          </div>
+        </div>
+        <a class="insta reveal" href="https://www.instagram.com/noooidea.creative/" target="_blank" rel="noopener noreferrer">
+          <img src="/images/instagram-creative-card-v1.webp" alt="A miniature gallery inspired by my 3D renders: a riverside shop, snowman, moon-and-stars switch, and framed abstract print" loading="lazy">
+          <div><div><h3 class="serif">A past life in polygons.</h3><span>@noooidea.creative · 3D &amp; animation</span></div><span aria-hidden="true">↗</span></div>
+        </a>
+      </div>
+    </section>
+    <footer><span>© 2026 Oakkar</span><span>Stay curious.</span></footer>
+  </main>
+</div>
+<script>
+document.documentElement.classList.add('js');
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// Reveal once on scroll.
+if ('IntersectionObserver' in window && !reduced) {
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+} else document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+
+// Scroll-spy for the sidebar.
+const links = [...document.querySelectorAll('.toc a')];
+const spy = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  links.forEach(a => a.setAttribute('aria-current', a.hash === '#' + e.target.id));
+}), { rootMargin: '-45% 0px -50% 0px' });
+document.querySelectorAll('main section[id]').forEach(s => spy.observe(s));
+
+// Speech bubble: true facts, gently rotating.
+const facts = [['RIGHT NOW', 'Currently learning & building.'], ['FUN FACT', 'PlayKit exists because nobody had chips.'], ['ALSO', 'I used to make 3D stuff. Hence the clay.'], ['WEEKENDS', 'Probably playing football.']];
+const bubble = document.getElementById('bubble');
+let f = 0;
+if (!reduced) setInterval(() => {
+  bubble.classList.add('swap');
+  setTimeout(() => { f = (f + 1) % facts.length; bubble.querySelector('small').textContent = facts[f][0]; bubble.querySelector('span').textContent = facts[f][1]; bubble.classList.remove('swap'); }, 260);
+}, 4200);
+
+// Chess clock: a working taste of PlayKit.
+const START = 180_000;
+const sides = [...document.querySelectorAll('#clock button')];
+const statusEl = document.getElementById('clock-status');
+let times = [START, START], active = null, last = 0, raf = 0;
+const fmt = ms => { if (ms <= 0) return '0:00'; if (ms < 10_000) return (ms / 1000).toFixed(1); const s = Math.ceil(ms / 1000); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
+const paint = () => sides.forEach((b, i) => { b.querySelector('.time').textContent = fmt(times[i]); b.dataset.active = active === i; b.dataset.flag = times[i] <= 0; });
+const tick = now => {
+  times[active] = Math.max(0, times[active] - (now - last)); last = now; paint();
+  if (times[active] <= 0) { statusEl.textContent = `Player ${active + 1} flagged. Reset to play again.`; active = null; return; }
+  raf = requestAnimationFrame(tick);
+};
+sides.forEach((b, i) => b.addEventListener('click', () => {
+  if (times.some(t => t <= 0) || (active !== null && active !== i)) return;
+  cancelAnimationFrame(raf); active = 1 - i; last = performance.now();
+  statusEl.textContent = `Player ${active + 1} to move.`; raf = requestAnimationFrame(tick);
+}));
+document.getElementById('clock-reset').addEventListener('click', () => { cancelAnimationFrame(raf); times = [START, START]; active = null; statusEl.textContent = 'Either player starts the clock.'; paint(); });
+</script>
+</body>
+</html>

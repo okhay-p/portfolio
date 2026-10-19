@@ -1,0 +1,28 @@
+---
+interface Props {
+  exhibit: {
+    id: string; title: string; status: string; tone: string; remark: string;
+    kind?: string; plaque?: string; image?: string; backdrop?: string;
+  };
+  number: string;
+  eager?: boolean;
+}
+const { exhibit, number, eager = false } = Astro.props;
+const { id, title, status, tone, remark, kind, plaque, image, backdrop } = exhibit;
+---
+<a
+  class:list={['niche', kind && `niche-${kind}`, { archived: tone === 'archived' }]}
+  href={`#exhibit-${id}`}
+  aria-label={`${number}: ${title}, ${status}`}
+  data-remark={remark}
+  style={backdrop && `--backdrop:${backdrop}`}
+>
+  {kind === 'note' ? (
+    <span class="paper" aria-hidden="true"><span class="pin"></span><b>{title}</b><i></i><i></i><i></i></span>
+  ) : kind === 'empty' ? (
+    <><span class="ring" aria-hidden="true"></span><span class="mystery" aria-hidden="true">?</span></>
+  ) : (
+    <img class="art" src={image} alt="" width="1200" height="800" loading={eager ? 'eager' : 'lazy'} decoding="async" />
+  )}
+  <span class="plaque" aria-hidden="true"><span>{number}</span>{plaque ?? title}</span>
+</a>
